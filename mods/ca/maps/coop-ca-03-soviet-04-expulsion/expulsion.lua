@@ -165,6 +165,7 @@ Tick = function()
 	end
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -195,10 +196,17 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitGDI = function()
 	AutoRepairAndRebuildBuildings(GDI, 15)
 	SetupRefAndSilosCaptureCredits(GDI)
 	AutoReplaceHarvesters(GDI)
+	AutoRebuildConyards(GDI)
 	InitAiUpgrades(GDI)
 
 	local gdiGroundAttackers = GDI.GetGroundAttackers()
@@ -221,8 +229,6 @@ InitGDI = function()
 	end)
 
 	Trigger.AfterDelay(Squads.GDIAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-		InitAirAttackSquad(Squads.GDIAir, GDI, PID, { "harv", "v2rl", "apwr", "tsla", "ttra", "v3rl", "mig", "hind", "suk", "suk.upg", "kiro", "apoc" })
-		end)
+		InitAirAttackSquad(Squads.GDIAir, GDI)
 	end)
 end

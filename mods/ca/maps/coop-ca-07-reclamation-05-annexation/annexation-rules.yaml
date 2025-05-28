@@ -53,6 +53,12 @@ Player:
 	PlayerResources:
 		DefaultCash: 6000
 
+# Purified Tib doesn't damage infantry
+
+^Infantry:
+	DamagedByTerrain@TIBDAMAGE:
+		Terrain: Tiberium
+
 # Disable tech
 
 MSHP:
@@ -104,7 +110,6 @@ SPLITBLUE:
 		Name: Blossom Tree
 
 WORMHOLE:
-	-PopControlled:
 	-TeleportNetwork:
 	Health:
 		HP: 300000

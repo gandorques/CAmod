@@ -363,6 +363,7 @@ InitUSSR = function()
 	AutoRepairAndRebuildBuildings(USSR, 10)
 	SetupRefAndSilosCaptureCredits(USSR)
 	AutoReplaceHarvesters(USSR)
+	AutoRebuildConyards(USSR)
 
 	-- Set western patrol
 	Utils.Do(WestPatrolUnits, function(unit)
@@ -400,9 +401,7 @@ InitUSSR = function()
 
 	-- MiG attacks
 	Trigger.AfterDelay(Squads.Migs.Delay[Difficulty], function()
-		Utils.Random(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.Migs, USSR, PID, { "harv", "pris", "agun", "pbox" })
-		end)
+		InitAirAttackSquad(Squads.Migs, USSR)
 	end)
 
 	-- On player crossing Soviet border start making infantry at western barracks
@@ -549,7 +548,7 @@ InterdimensionalCrossrip = function()
 	Trigger.AfterDelay(EvacuationTime[Difficulty] - DateTime.Seconds(12), function()
 		Reinforcements.ReinforceWithTransport(DummyGuy, "nhaw.paradrop", nil, { CPos.New(Evac1.Location.X - 10, Evac1.Location.Y + 15), CPos.New(Evac1.Location.X, Evac1.Location.Y - 1) })
 		Reinforcements.ReinforceWithTransport(DummyGuy, "nhaw.paradrop", nil, { CPos.New(Evac2.Location.X - 10, Evac2.Location.Y + 15), CPos.New(Evac2.Location.X, Evac2.Location.Y - 1) })
-		Reinforcements.ReinforceWithTransport(DummyGuy, "nhaw.paradrop", nil, { CPos.New(Evac2.Location.X - 10, Evac3.Location.Y + 15), CPos.New(Evac3.Location.X, Evac3.Location.Y - 1) })
+		Reinforcements.ReinforceWithTransport(DummyGuy, "nhaw.paradrop", nil, { CPos.New(Evac3.Location.X - 10, Evac3.Location.Y + 15), CPos.New(Evac3.Location.X, Evac3.Location.Y - 1) })
 	end)
 
 	Trigger.AfterDelay(EvacuationTime[Difficulty] - DateTime.Seconds(40), SendDevastators)
@@ -657,23 +656,23 @@ GetInvasionInterval = function()
 
 	if Difficulty == "easy" then
 		if armyValue >= 10000 then
-			return DateTime.Seconds(18)
+			return DateTime.Seconds(22)
 		else
 			return DateTime.Seconds(24)
 		end
 	else
 		if armyValue >= 48000 then
-			return DateTime.Seconds(12)
+			return DateTime.Seconds(13)
 		elseif armyValue >= 38000 then
-			return DateTime.Seconds(14)
+			return DateTime.Seconds(15)
 		elseif armyValue >= 28000 then
-			return DateTime.Seconds(16)
+			return DateTime.Seconds(17)
 		elseif armyValue >= 18000 then
-			return DateTime.Seconds(18)
+			return DateTime.Seconds(19)
 		elseif armyValue >= 10000 then
-			return DateTime.Seconds(21)
+			return DateTime.Seconds(22)
 		else
-			return DateTime.Seconds(25)
+			return DateTime.Seconds(24)
 		end
 	end
 end

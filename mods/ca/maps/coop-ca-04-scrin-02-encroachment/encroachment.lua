@@ -244,6 +244,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitGreece = function()
 	if Difficulty == "easy" then
 		RebuildExcludes.Greece = { Types = { "gun", "pbox", "pris", "awpr", "weat" } }
@@ -254,6 +260,7 @@ InitGreece = function()
 	AutoRepairAndRebuildBuildings(Greece, 15)
 	SetupRefAndSilosCaptureCredits(Greece)
 	AutoReplaceHarvesters(Greece)
+	AutoRebuildConyards(Greece)
 	InitAiUpgrades(Greece)
 
 	Actor.Create("ai.unlimited.power", true, { Owner = Greece })
@@ -274,9 +281,7 @@ InitGreece = function()
 	end)
 
 	Trigger.AfterDelay(Squads.AlliedAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.AlliedAir, Greece, PID, { "harv.scrin", "scol", "proc.scrin", "ptur", "shar", "stmr", "enrv", "tpod" })
-		end)
+		InitAirAttackSquad(Squads.AlliedAir, Greece)
 	end)
 end
 
@@ -292,6 +297,7 @@ InitGDI = function()
 	AutoRepairAndRebuildBuildings(GDI, 15)
 	SetupRefAndSilosCaptureCredits(GDI)
 	AutoReplaceHarvesters(GDI)
+	AutoRebuildConyards(GDI)
 	InitAiUpgrades(GDI)
 
 	local gdiGroundAttackers = GDI.GetGroundAttackers()
@@ -310,8 +316,6 @@ InitGDI = function()
 	end)
 
 	Trigger.AfterDelay(Squads.GDIAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.GDIAir, GDI, PID, { "harv.scrin", "scol", "proc.scrin", "ptur", "shar", "stmr", "enrv", "tpod" })
-		end)
+		InitAirAttackSquad(Squads.GDIAir, GDI)
 	end)
 end

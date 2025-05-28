@@ -11,6 +11,7 @@ SuperweaponsEnabledTime = {
 AdjustedGDICompositions = AdjustCompositionsForDifficulty(UnitCompositions.GDI)
 
 Squads = {
+	InitTime = 0 - DateTime.Minutes(2),
 	GDIMain1 = {
 		Delay = {
 			easy = DateTime.Minutes(5),
@@ -32,6 +33,7 @@ Squads = {
 		},
 	},
 	GDIMain2 = {
+		InitTime = 0 - DateTime.Minutes(2),
 		Delay = {
 			easy = DateTime.Minutes(6),
 			normal = DateTime.Minutes(4),
@@ -192,6 +194,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -226,12 +229,19 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitGDI = function()
 	RebuildExcludes.GDI = { Actors = OutpostStructures, Types = { "hq", "eye" } }
 
 	AutoRepairAndRebuildBuildings(GDI, 15)
 	SetupRefAndSilosCaptureCredits(GDI)
 	AutoReplaceHarvesters(GDI)
+	AutoRebuildConyards(GDI)
 	InitAiUpgrades(GDI)
 
 	local gdiGroundAttackers = GDI.GetGroundAttackers()
@@ -291,17 +301,12 @@ InitGDIAttacks = function()
 		end)
 
 		Trigger.AfterDelay(Squads.GDIAir.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.GDIAir, GDI, PID, { "harv", "4tnk", "4tnk.atomic", "3tnk", "3tnk.atomic", "3tnk.rhino", "3tnk.rhino.atomic",
-				"katy", "v3rl", "ttra", "v3rl", "apwr", "tpwr", "npwr", "tsla", "proc", "nukc", "ovld", "apoc", "apoc.atomic", "ovld.atomic" })
-			end)
+			InitAirAttackSquad(Squads.GDIAir, GDI)
 		end)
 
 		if Difficulty == "hard" then
 			Trigger.AfterDelay(Squads.AntiTankAir.Delay[Difficulty], function()
-				Utils.Do(CoopPlayers,function(PID)
-					InitAirAttackSquad(Squads.AntiTankAir, GDI, PID, { "4tnk", "4tnk.atomic", "apoc", "apoc.atomic", "ovld", "ovld.atomic" })
-				end)
+				InitAirAttackSquad(Squads.AntiTankAir, GDI, USSR, { "4tnk", "4tnk.atomic", "apoc", "apoc.atomic", "ovld", "ovld.atomic" })
 			end)
 		end
 	end

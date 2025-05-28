@@ -8,6 +8,7 @@ AdjustedGDICompositions = AdjustCompositionsForDifficulty(UnitCompositions.GDI)
 
 Squads = {
 	Main = {
+		InitTime = 0,
 		Delay = {
 			easy = DateTime.Minutes(7),
 			normal = DateTime.Minutes(5),
@@ -27,6 +28,7 @@ Squads = {
 		},
 	},
 	Forward = {
+		InitTime = 0,
 		Delay = {
 			easy = DateTime.Minutes(4),
 			normal = DateTime.Minutes(3),
@@ -196,6 +198,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -230,6 +233,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 -- Functions
 
 InitNod = function()
@@ -247,6 +256,7 @@ InitGDI = function()
 	AutoRepairAndRebuildBuildings(GDI)
 	SetupRefAndSilosCaptureCredits(GDI)
 	AutoReplaceHarvesters(GDI)
+	AutoRebuildConyards(GDI)
 
 	local gdiGroundAttackers = GDI.GetGroundAttackers()
 
@@ -472,16 +482,12 @@ InitGDIAttacks = function()
 	end)
 
 	Trigger.AfterDelay(Squads.GDIAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.GDIAir, GDI, PID, { "harv", "harv.td", "arty.nod", "mlrs", "wtnk", "avtr", "reap", "rmbc", "enli", "tplr", "obli", "atwr", "gtwr", "stwr", "tmpl", "tmpp", "mslo.nod", "gun.nod", "hq", "nuk2" })
-		end)
+		InitAirAttackSquad(Squads.GDIAir, GDI)
 	end)
 
 	if Difficulty == "hard" then
 		Trigger.AfterDelay(Squads.AntiCyborgAir.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.AntiCyborgAir, GDI, PID, { "rmbc", "enli", "reap", "avtr" })
-			end)
+			InitAirAttackSquad(Squads.AntiCyborgAir, GDI, MissionPlayers[1], { "rmbc", "enli", "reap", "avtr" })
 		end)
 	end
 end

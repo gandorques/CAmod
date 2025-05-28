@@ -33,7 +33,7 @@ RiftEnabledTime = {
 if Difficulty == "hard" then
 	table.insert(UnitCompositions.Scrin, {
 		Infantry = { "s3", "s4", "evis", "evis", "evis", "evis", "s1", "s1", "s4", "s1", "s4", "s1", "s4", "s1", "mast" },
-		Vehicles = { "shrw", TripodVariant, TripodVariant, "shrw", CorrupterDevourerOrDarkener, "oblt", "shrw" },
+		Vehicles = { "shrw", TripodVariant, TripodVariant, "shrw", CorrupterOrDevourer, "oblt", "shrw" },
 		Aircraft = { PacOrDevastator, "pac" },
 		MinTime = DateTime.Minutes(22)
 	})
@@ -372,6 +372,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -411,12 +412,19 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitScrin = function()
 	RebuildExcludes.Scrin = { Types = { "rfgn" } }
 
 	AutoRepairAndRebuildBuildings(Scrin, 15)
 	SetupRefAndSilosCaptureCredits(Scrin)
 	AutoReplaceHarvesters(Scrin)
+	AutoRebuildConyards(Scrin)
 	InitAiUpgrades(Scrin)
 
 	local scrinGroundAttackers = Scrin.GetGroundAttackers()
@@ -435,15 +443,11 @@ InitScrin = function()
 	end)
 
 	Trigger.AfterDelay(Squads.ScrinAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinAir, Scrin, PID, { "harv", "harv.td", "arty.nod", "mlrs", "obli", "wtnk", "gun.nod", "hq", "tmpl", "nuk2", "rmbc", "enli", "tplr" })
-		end)
+		InitAirAttackSquad(Squads.ScrinAir, Scrin)
 	end)
 
 	if Difficulty == "hard" then
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinAirToAir, Scrin, PID, { "scrn", "apch", "venm" })
-		end)
+		InitAirAttackSquad(Squads.ScrinAirToAir, Scrin, Nod, { "Aircraft" }, "ArmorType")
 	end
 
 	Trigger.AfterDelay(1, function()
@@ -493,6 +497,8 @@ InitScrinRebels = function()
 
 	AutoRepairAndRebuildBuildings(ScrinRebels, 15)
 	AutoReplaceHarvesters(ScrinRebels)
+	AutoRebuildConyards(Scrin, true)
+	InitAiUpgrades(ScrinRebels)
 
 	local scrinRebelGroundAttackers = ScrinRebels.GetGroundAttackers()
 
@@ -506,7 +512,7 @@ InitScrinRebels = function()
 	end)
 
 	Trigger.AfterDelay(Squads.ScrinRebelsAir.Delay[Difficulty], function()
-		InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels, Scrin, { "harv.scrin", "scol", "tpod", "rtpd", "ptur", "devo", "corr", "ruin" })
+		InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels, Scrin)
 	end)
 end
 
@@ -516,6 +522,11 @@ InitGDI = function()
 
 		Media.DisplayMessage("Our forces were successful in luring GDI here and they have established a base. The situation has been explained to them and they have agreed to a cease fire, but remain vigilant commander, our old enemy cannot be trusted.", "Kane", HSLColor.FromHex("FF0000"))
 		MediaCA.PlaySound("kane_gdibase.aud", 2)
+
+		AutoRepairAndRebuildBuildings(GDI, 15)
+		AutoReplaceHarvesters(GDI)
+		AutoRebuildConyards(GDI, true)
+		InitAiUpgrades(GDI)
 
 		local gdiUnits = GDIHostile.GetActors()
 		Utils.Do(gdiUnits, function(a)
@@ -543,13 +554,14 @@ InitGDI = function()
 		InitAttackSquad(Squads.GDIMain, GDI, Scrin)
 
 		Trigger.AfterDelay(Squads.GDIAir.Delay[Difficulty], function()
-			InitAirAttackSquad(Squads.GDIAir, GDI, Scrin, { "scol", "tpod", "reac", "rea2", "harv.scrin", "proc.scrin", "etpd" })
+			InitAirAttackSquad(Squads.GDIAir, GDI, Scrin)
 		end)
 	end
 end
 
 SendNextExterminator = function()
 	if NextExterminatorIndex <= ExterminatorAttackCount[Difficulty] and not Victory then
+		local exterminator
 
 		if Exterminators[NextExterminatorIndex] ~= nil then
 			exterminator = Exterminators[NextExterminatorIndex]

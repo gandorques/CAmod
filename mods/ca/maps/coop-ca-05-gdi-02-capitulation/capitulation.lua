@@ -1,4 +1,3 @@
-
 AttackPaths = {
 	{ WestDelivery3.Location, AttackRally1.Location },
 	{ WestDelivery3.Location, AttackRally2.Location },
@@ -143,7 +142,7 @@ Squads = {
 		},
 		AttackValuePerSecond = {
 			easy = { Min = 5, Max = 10 },
-			normal = { Min = 9, Max = 15 },
+			normal = { Min = 9, Max = 25 },
 			hard = { Min = 13, Max = 40 },
 		},
 		ProducerTypes = { Aircraft = { "afld" } },
@@ -152,12 +151,14 @@ Squads = {
 				{ Aircraft = { "kiro" } },
 			},
 			normal = {
-				{ Aircraft = { "kiro" } },
+				{ Aircraft = { "kiro" }, MaxTime = DateTime.Minutes(20) },
+				{ Aircraft = { "kiro", "kiro" }, MinTime = DateTime.Minutes(20) },
 			},
 			hard = {
-				{ Aircraft = { "kiro" }, MaxTime = DateTime.Minutes(15) },
-				{ Aircraft = { "kiro", "kiro" }, MinTime = DateTime.Minutes(15), MaxTime = DateTime.Minutes(30) },
-				{ Aircraft = { "kiro", "kiro", "kiro" }, MinTime = DateTime.Minutes(30), },
+				{ Aircraft = { "kiro" }, MaxTime = DateTime.Minutes(10) },
+				{ Aircraft = { "kiro", "kiro" }, MinTime = DateTime.Minutes(10), MaxTime = DateTime.Minutes(20) },
+				{ Aircraft = { "kiro", "kiro", "kiro" }, MinTime = DateTime.Minutes(20), MaxTime = DateTime.Minutes(30) },
+				{ Aircraft = { "kiro", "kiro", "kiro", "kiro" }, MinTime = DateTime.Minutes(30) }
 			}
 		},
 		AttackPaths = {
@@ -267,6 +268,7 @@ Tick = function()
 	end
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 	PanToStart()
 end
 
@@ -297,12 +299,19 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitUSSR = function()
 	RebuildExcludes.USSR = { Types = { "tpwr", "tsla", "sam", "npwr" } }
 
 	AutoRepairAndRebuildBuildings(USSR, 15)
 	SetupRefAndSilosCaptureCredits(USSR)
 	AutoReplaceHarvesters(USSR)
+	AutoRebuildConyards(USSR)
 	InitAiUpgrades(USSR)
 
 	Actor.Create("ai.unlimited.power", true, { Owner = USSR })
@@ -325,25 +334,17 @@ InitUSSR = function()
 	end)
 
 	Trigger.AfterDelay(Squads.AirAntiLight.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.AirAntiLight, USSR, PID, { "msam", "xo", "rmbo", "nuk2", "hq", "gtek", "n3", "hsam" })
-		end)
+		InitAirAttackSquad(Squads.AirAntiLight, USSR, MissionPlayers[1], { "Light" }, "ArmorType")
 	end)
-	
+
 	Trigger.AfterDelay(Squads.AirAntiHeavy.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.AirAntiHeavy, USSR, PID, { "atwr", "htnk", "htnk.ion", "mtnk", "disr", "thwk" })
-		end)
+		InitAirAttackSquad(Squads.AirAntiHeavy, USSR, MissionPlayers[1], { "Heavy" }, "ArmorType")
 	end)
-	
-	Utils.Do(CoopPlayers, function(PID)
-		InitAirAttackSquad(Squads.AirAntiAir, USSR, PID, { "orca", "a10", "a10.sw", "a10.gau", "auro" })
-	end)
-	
+
+	InitAirAttackSquad(Squads.AirAntiAir, USSR, MissionPlayers[1], { "orca", "orcb", "a10", "a10.sw", "a10.gau", "auro" })
+
 	Trigger.AfterDelay(Squads.Kirovs.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAttackSquad(Squads.Kirovs, USSR, PID)
-		end)
+		InitAttackSquad(Squads.Kirovs, USSR)
 	end)
 
 	Trigger.AfterDelay(ParabombsEnabledDelay[Difficulty], function()

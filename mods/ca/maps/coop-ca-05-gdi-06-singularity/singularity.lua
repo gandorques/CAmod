@@ -258,7 +258,7 @@ WorldLoaded = function()
 		if ScrinDefenseBuff2.IsDead then
 			IonConduits.Destroy()
 			if NodFreed then
-				InitHackers()
+				InitHackers(HackersDelay[Difficulty])
 			end
 		end
 
@@ -275,7 +275,7 @@ WorldLoaded = function()
 		if ScrinDefenseBuff1.IsDead then
 			IonConduits.Destroy()
 			if NodFreed then
-				InitHackers()
+				InitHackers(HackersDelay[Difficulty])
 			end
 		end
 	end)
@@ -294,7 +294,7 @@ WorldLoaded = function()
 		Media.DisplayMessage("Beginning our attack run. Let's see what we're up against. Over.", "GDI Pilot", HSLColor.FromHex("F2CF74"))
 		MediaCA.PlaySound("pilot_begin.aud", 1.5)
 	end)
-	
+
 	Trigger.AfterDelay(DateTime.Seconds(10), function()
 		DoInterceptors()
 		IntromothershipCamera.Destroy()
@@ -315,10 +315,23 @@ WorldLoaded = function()
 	end)
 
 	Trigger.OnDamaged(SignalTransmitter, function(self, attacker, damage)
-		if not SignalTransmitterDamageWarning and not FirstHackersArrived and self.Health < self.MaxHealth / 2 then
-			SignalTransmitterDamageWarning = true
-			Notification("We have reason to believe the Signal Transmitter may be key to bringing the Mothership's shields down. Recommend we leave it intact, pending confirmation.")
-			MediaCA.PlaySound("c_leavesignaltransmitter.aud", 2)
+		if IsOwnedByCoopPlayer(attacker) then
+			InitHackers(0)
+		end
+	end)
+
+	Trigger.OnEnteredProximityTrigger(SignalTransmitter.CenterPosition, WDist.New(12 * 1024), function(a, id)
+		if IsOwnedByCoopPlayer(a) and a.HasProperty("Health") and not a.HasProperty("Land") then
+			Trigger.RemoveProximityTrigger(id)
+			InitHackers(0)
+		end
+	end)
+
+	Trigger.OnEnteredProximityTrigger(WormholeWP.CenterPosition, WDist.New(6 * 1024), function(a, id)
+		if a.Owner == Nod and not a.IsDead and a.HasProperty("Hunt") then
+			a.Stop()
+			Trigger.ClearAll(a)
+			a.Hunt()
 		end
 	end)
 
@@ -332,7 +345,7 @@ WorldLoaded = function()
 		end
 	end)
 
-	local cyborgs = CyborgSlaves.GetActorsByTypes({ "rmbc", "enli", "tplr", "n3c" })
+	local cyborgs = CyborgSlaves.GetActorsByTypes({ "rmbc", "enli", "tplr", "reap" })
 	Utils.Do(cyborgs, function(c)
 		c.GrantCondition("bluebuff")
 
@@ -341,6 +354,11 @@ WorldLoaded = function()
 				SleepingCyborgsMessageShown = true
 				Notification("Nod cyborgs appear to be in a hibernation state. The enriched Tiberium is providing powerful regeneration. Recommendation is to not engage.")
 				MediaCA.PlaySound("c_hibernation.aud", 2)
+				Utils.Do(cyborgs, function(c)
+					if not c.IsDead then
+						c.GrantCondition("warned")
+					end
+				end)
 			end
 		end)
 	end)
@@ -379,6 +397,7 @@ Tick = function()
 	end
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 	PanToFinale()
 end
 
@@ -482,12 +501,16 @@ OncePerFiveSecondChecks = function()
 						return
 					end
 
-					MediaCA.PlaySound("seth_morehackers.aud", 2)
-					Media.DisplayMessage("We are sending you another squad of hackers. Perhaps you'll be more careful with them this time.", "Nod Commander", HSLColor.FromHex("FF0000"))
 					DropHackers()
 				end)
 			end
 		end
+	end
+end
+
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
 	end
 end
 
@@ -499,6 +522,7 @@ InitScrin = function()
 	AutoRepairAndRebuildBuildings(Scrin, 15)
 	SetupRefAndSilosCaptureCredits(Scrin)
 	AutoReplaceHarvesters(Scrin)
+	AutoRebuildConyards(Scrin)
 	InitAiUpgrades(Scrin)
 
 	local scrinGroundAttackers = Scrin.GetGroundAttackers()
@@ -520,9 +544,7 @@ InitScrin = function()
 	end)
 
 	Trigger.AfterDelay(Squads.ScrinAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinAir, Scrin, PID, { "harv.td", "msam", "hsam", "nuke", "nuk2", "orca", "a10", "a10.sw", "a10.gau", "auro", "htnk", "htnk.drone", "htnk.ion", "htnk.hover", "titn", "titn.rail" })
-		end)
+		InitAirAttackSquad(Squads.ScrinAir, Scrin)
 	end)
 
 	local scrinPower = Scrin.GetActorsByTypes({ "reac", "rea2" })
@@ -608,14 +630,14 @@ InitGreece = function()
 	end)
 end
 
-InitHackers = function()
+InitHackers = function(delay)
 	if FirstHackersRequested then
 		return
 	end
 
 	FirstHackersRequested = true
 
-	Trigger.AfterDelay(HackersDelay[Difficulty], function()
+	Trigger.AfterDelay(delay, function()
 		if SignalTransmitter.IsDead then
 			return
 		end
@@ -628,8 +650,13 @@ end
 DropHackers = function()
 	Beacon.New(DummyGuy, HackerDropLanding.CenterPosition)
 
-	MediaCA.PlaySound("seth_hackers.aud", 2)
-	Media.DisplayMessage("Attention GDI commander. We are sending you some of our hackers. Use them to hack into the Scrin Signal Transmitter. They will be able to bring the Mothership's shields down for you.", "Nod Commander", HSLColor.FromHex("FF0000"))
+	if not FirstHackersArrived then
+		MediaCA.PlaySound("seth_hackers.aud", 2)
+		Media.DisplayMessage("Attention GDI commander. We are sending you some of our hackers. Use them to hack into the Scrin Signal Transmitter. They will be able to bring the Mothership's shields down for you.", "Nod Commander", HSLColor.FromHex("FF0000"))
+	else
+		MediaCA.PlaySound("seth_morehackers.aud", 2)
+		Media.DisplayMessage("We are sending you another squad of hackers. Perhaps you'll be more careful with them this time.", "Nod Commander", HSLColor.FromHex("FF0000"))
+	end
 
 	local hackerFlare = Actor.Create("flare", true, { Owner = DummyGuy, Location = HackerDropLanding.Location })
 	Trigger.AfterDelay(DateTime.Seconds(10), function()
@@ -833,7 +860,7 @@ FlipSlaveFaction = function(player)
 		InitNod()
 		InitAttackSquad(Squads.ScrinEast, Scrin)
 		if ScrinDefenseBuff1.IsDead and ScrinDefenseBuff2.IsDead then
-			InitHackers()
+			InitHackers(HackersDelay[Difficulty])
 		end
 		Notification("Nod forces have been released from Scrin control.")
 		MediaCA.PlaySound("c_nodreleased.aud", 2)
@@ -917,6 +944,9 @@ DoFinale = function()
 	end)
 
 	Actor.Create("wormhole", true, { Owner = Kane, Location = KaneSpawn.Location })
+	Actor.Create("wormhole", true, { Owner = Kane, Location = CyborgWormhole1.Location })
+	Actor.Create("wormhole", true, { Owner = Kane, Location = CyborgWormhole2.Location })
+
 	local kane = Actor.Create("kane", true, { Owner = Kane, Location = KaneSpawn.Location, Facing = Angle.South })
 
 	Trigger.AfterDelay(DateTime.Seconds(5), function()
@@ -924,7 +954,7 @@ DoFinale = function()
 		kane.Move(KaneSpawn.Location + CVec.New(0, 3))
 	end)
 
-	local cyborgs = CyborgSlaves.GetActorsByTypes({ "rmbc", "enli", "tplr", "n3c" })
+	local cyborgs = CyborgSlaves.GetActorsByTypes({ "rmbc", "enli", "tplr", "reap" })
 
 	Utils.Do(cyborgs, function(a)
 		a.Owner = Kane
@@ -935,13 +965,17 @@ DoFinale = function()
 		Media.DisplayMessage("Well commander, we meet at last! Your contribution has been invaluable, unwitting as it may be.", "Kane", HSLColor.FromHex("FF0000"))
 		MediaCA.PlaySound("outro.aud", 2.5)
 
-		Utils.Do(cyborgs, function(a)
-			Trigger.AfterDelay(AdjustTimeForGameSpeed(DateTime.Seconds(25)), function()
-				if not a.IsDead then
-					a.GrantCondition("kane-revealed")
-				end
+		Trigger.AfterDelay(AdjustTimeForGameSpeed(DateTime.Seconds(25)), function()
+			if not Gateway.IsDead then
+				Gateway.GrantCondition("kane-revealed")
+			end
+
+			Utils.Do(cyborgs, function(a)
 				MoveToWormhole(a)
 			end)
+
+			Reinforcements.Reinforce(Kane, { "n1c", "rmbc", "rmbc", "enli", "reap", "rmbc", "enli", "reap", "rmbc", "enli", "enli", "n3c", "rmbc", "reap", "n3c" }, { CyborgWormhole1.Location, WormholeWP.Location }, 25)
+			Reinforcements.Reinforce(Kane, { "rmbc", "rmbc", "enli", "reap", "rmbc", "enli", "reap", "rmbc", "enli", "n1c", "reap", "n1c", "n3c", "enli", "rmbc" }, { CyborgWormhole2.Location, WormholeWP.Location }, 25)
 		end)
 
 		Trigger.AfterDelay(AdjustTimeForGameSpeed(DateTime.Seconds(6)), function()

@@ -315,9 +315,7 @@ InitNod = function()
 	end)
 
 	Trigger.AfterDelay(Squads.Air.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.Air, Nod, PID, { "harv", "harv.td", "proc", "proc.scrin" })
-		end)
+		InitAirAttackSquad(Squads.Air, Nod, MissionPlayers[1], { "harv", "harv.td", "proc", "proc.scrin" })
 	end)
 end
 

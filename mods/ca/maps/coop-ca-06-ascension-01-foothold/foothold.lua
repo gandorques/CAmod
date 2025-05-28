@@ -220,6 +220,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -264,6 +265,12 @@ end
 OncePerFiveSecondChecks = function()
 	if DateTime.GameTime > 1 and DateTime.GameTime % 125 == 0 then
 		UpdatePlayerBaseLocations()
+	end
+end
+
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
 	end
 end
 
@@ -366,6 +373,7 @@ InitScrin = function()
 	AutoRepairAndRebuildBuildings(Scrin, 15)
 	SetupRefAndSilosCaptureCredits(Scrin)
 	AutoReplaceHarvesters(Scrin)
+	AutoRebuildConyards(Scrin)
 	InitAiUpgrades(Scrin)
 
 	local scrinGroundAttackers = Scrin.GetGroundAttackers()
@@ -382,9 +390,7 @@ BeginScrinAttacks = function()
 	end)
 
 	Trigger.AfterDelay(Squads.ScrinAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinAir, Scrin, PID, { "harv.td", "msam", "hsam", "nuke", "nuk2", "orca", "a10", "a10.sw", "a10.gau", "auro", "htnk", "htnk.drone", "htnk.ion", "htnk.hover", "titn", "titn.rail" })
-		end)
+		InitAirAttackSquad(Squads.ScrinAir, Scrin)
 	end)
 
 	if Difficulty ~= "easy" then

@@ -28,7 +28,7 @@ Players:
 		Name: Creeps
 		NonCombatant: True
 		Faction: Random
-		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Marinesko, Romanov, Krukov
+		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited
 	PlayerReference@USSR:
 		Name: USSR
 		AllowBots: True
@@ -42,7 +42,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Marinesko:
 		Name: Marinesko
 		Bot: campaign
@@ -61,6 +61,27 @@ Players:
 		Faction: soviet
 		Color: 485183
 		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Marinesko, Romanov, Creeps
+	PlayerReference@MarineskoUnited:
+		Name: MarineskoUnited
+		Bot: campaign
+		Faction: soviet
+		Color: 994050
+		Allies: RomanovUnited, KrukovUnited
+		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Creeps
+	PlayerReference@RomanovUnited:
+		Name: RomanovUnited
+		Bot: campaign
+		Faction: soviet
+		Color: FF9922
+		Allies: MarineskoUnited, KrukovUnited
+		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Creeps
+	PlayerReference@KrukovUnited:
+		Name: KrukovUnited
+		Bot: campaign
+		Faction: soviet
+		Color: 485183
+		Allies: MarineskoUnited, RomanovUnited
+		Enemies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5, Creeps
 	PlayerReference@DummyGuy:
 		Name: DummyGuy
 		Bot: campaign
@@ -69,7 +90,7 @@ Players:
 		Color: FE1100
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Multi1:
 		Name: Multi1
 		Playable: True
@@ -80,7 +101,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Multi2:
 		Name: Multi2
 		Playable: True
@@ -91,7 +112,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Multi3:
 		Name: Multi3
 		Playable: True
@@ -102,7 +123,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Multi4:
 		Name: Multi4
 		Playable: True
@@ -113,7 +134,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 	PlayerReference@Multi5:
 		Name: Multi5
 		Playable: True
@@ -124,7 +145,7 @@ Players:
 		LockTeam: True
 		Team: 1
 		Allies: DummyGuy, USSR, Multi1, Multi2, Multi3, Multi4, Multi5
-		Enemies: Marinesko, Romanov, Krukov, Creeps
+		Enemies: Marinesko, Romanov, Krukov, MarineskoUnited, RomanovUnited, KrukovUnited, Creeps
 
 Actors:
 	Actor0: mcv

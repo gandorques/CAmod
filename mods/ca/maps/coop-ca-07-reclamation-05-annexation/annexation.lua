@@ -6,7 +6,7 @@ ScrinAttackValues = {
 
 NodBuildingsToSell = { NodConyard, NodHand, NodFactory, NodComms }
 
-ScrinReinforcementSquad = { "s3", "s1", "s1", "s1", "s1", "s1", "s2", "s2", "s3", "intl", "rtpd", GunWalkerSeekerOrLacerator, CorrupterDevourerOrDarkener, CorrupterDevourerOrDarkener, GunWalkerSeekerOrLacerator, GunWalkerSeekerOrLacerator }
+ScrinReinforcementSquad = { "s3", "s1", "s1", "s1", "s1", "s1", "s2", "s2", "s3", "intl", "rtpd", GunWalkerSeekerOrLacerator, CorrupterOrDevourer, CorrupterOrDevourer, GunWalkerSeekerOrLacerator, GunWalkerSeekerOrLacerator }
 
 if Difficulty == "hard" then
 	table.insert(UnitCompositions.Scrin, {
@@ -203,6 +203,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -253,6 +254,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 UpdateMissionText = function()
 	if TimerTicks > 0 then
 		UserInterface.SetMissionText("Capture Nerve Center. Gateway collapses in " .. UtilsCA.FormatTimeForGameSpeed(TimerTicks), HSLColor.Yellow)
@@ -273,6 +280,7 @@ InitScrinRebels = function()
 		AutoRepairAndRebuildBuildings(p)
 		SetupRefAndSilosCaptureCredits(p)
 		AutoReplaceHarvesters(p)
+		AutoRebuildConyards(p)
 		InitAiUpgrades(p)
 
 		local scrinRebelsGroundAttackers = p.GetGroundAttackers()
@@ -293,10 +301,7 @@ InitScrinRebels = function()
 		InitAttackSquad(Squads.ScrinRebels3, ScrinRebels3)
 	end)
 	Trigger.AfterDelay(Squads.ScrinRebelsAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels1, PID, { "harv", "4tnk", "4tnk.atomic", "3tnk", "3tnk.atomic", "3tnk.rhino", "3tnk.rhino.atomic",
-			"katy", "v3rl", "ttra", "v3rl", "apwr", "tpwr", "npwr", "tsla", "proc", "nukc", "ovld", "apoc", "apoc.atomic", "ovld.atomic" })
-		end)
+		InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels1)
 	end)
 end
 

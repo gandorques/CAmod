@@ -25,6 +25,11 @@ AirFleetKillersThreshold = {
 	hard = 3
 }
 
+TripodKillersThreshold = {
+	normal = 12,
+	hard = 7
+}
+
 ParabombsEnabledDelay = {
 	easy = DateTime.Minutes(5),
 	normal = DateTime.Minutes(4),
@@ -126,6 +131,25 @@ Squads = {
 			}
 		},
 	},
+	TripodKillers = {
+		AttackValuePerSecond = {
+			normal = { Min = 20, Max = 20 },
+			hard = { Min = 30, Max = 30 },
+		},
+		ActiveCondition = function()
+			local tripods = Scrin.GetActorsByTypes({ "tpod", "rtpd" })
+			return #tripods > TripodKillersThreshold[Difficulty]
+		end,
+		ProducerTypes = { Aircraft = { "afld" } },
+		Units = {
+			normal = {
+				{ Aircraft = { "suk", "suk", "suk" } }
+			},
+			hard = {
+				{ Aircraft = { "suk", "suk", "suk", "suk" } }
+			}
+		},
+	}
 }
 
 WorldLoaded = function()
@@ -157,7 +181,7 @@ WorldLoaded = function()
 	
 	InitUSSR()
 
-	ObjectiveDestroyFactories = Scrin.AddObjective("Destroy Soviet Industrial Plant and all factories.")
+	ObjectiveDestroyBases = Scrin.AddObjective("Eliminate Soviet bases.")
 	ObjectiveDestroyUncrewed = Scrin.AddObjective("Destroy all uncrewed Soviet vehicles.")
 	ObjectiveDestroySAMs = Scrin.AddSecondaryObjective("Destroy front line of Soviet SAM Sites.")
 
@@ -189,12 +213,7 @@ WorldLoaded = function()
 		end)
 	end)
 
-	local factoriesAndIndustrialPlant = USSR.GetActorsByTypes({ "weap", "indp" })
 	local unmannedVehicles = USSRUnmanned.GetActorsByTypes({ "btr", "3tnk", "4tnk", "apoc", "ttra", "ttnk" })
-
-	Trigger.OnAllKilledOrCaptured(factoriesAndIndustrialPlant, function()
-		Scrin.MarkCompletedObjective(ObjectiveDestroyFactories)
-	end)
 
 	Trigger.OnAllKilledOrCaptured(unmannedVehicles, function()
 		Scrin.MarkCompletedObjective(ObjectiveDestroyUncrewed)
@@ -258,15 +277,22 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
 	if DateTime.GameTime > 1 and DateTime.GameTime % 25 == 0 then
 		USSR.Resources = USSR.ResourceCapacity - 500
 
+		if not PlayerHasBuildings(USSR) then
+			if not Scrin.IsObjectiveCompleted(ObjectiveDestroyBases) then
+				Scrin.MarkCompletedObjective(ObjectiveDestroyBases)
+			end
+		end
+
 		if CoopTeamHasNoRequiredUnits() then
-			if ObjectiveDestroyFactories ~= nil and not Scrin.IsObjectiveCompleted(ObjectiveDestroyFactories) then
-				Scrin.MarkFailedObjective(ObjectiveDestroyFactories)
+			if ObjectiveDestroyBases ~= nil and not Scrin.IsObjectiveCompleted(ObjectiveDestroyBases) then
+				Scrin.MarkFailedObjective(ObjectiveDestroyBases)
 			end
 			if ObjectiveDestroyUncrewed ~= nil and not Scrin.IsObjectiveCompleted(ObjectiveDestroyUncrewed) then
 				Scrin.MarkFailedObjective(ObjectiveDestroyUncrewed)
@@ -281,12 +307,19 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitUSSR = function()
-	RebuildExcludes.USSR = { Types = { "weap", "indp", "npwr", "tpwr", "tsla" }, Actors = { IslandAirfield1, IslandAirfield2, IslandAirfield3, IslandAirfield4, IslandAirfield5 } }
+	RebuildExcludes.USSR = { Types = { "npwr", "tpwr", "tsla" }, Actors = { IslandAirfield1, IslandAirfield2, IslandAirfield3, IslandAirfield4, IslandAirfield5 } }
 
 	AutoRepairAndRebuildBuildings(USSR, 15)
 	SetupRefAndSilosCaptureCredits(USSR)
 	AutoReplaceHarvesters(USSR)
+	AutoRebuildConyards(USSR)
 	InitAiUpgrades(USSR)
 
 	Actor.Create("ai.unlimited.power", true, { Owner = USSR })
@@ -316,15 +349,15 @@ InitUSSR = function()
 	end)
 
 	Trigger.AfterDelay(Squads.AirMain.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.AirMain, USSR, PID, { "harv.scrin", "scol", "proc.scrin", "ptur", "shar", "stmr", "enrv", "tpod" })
-		end)
+		InitAirAttackSquad(Squads.AirMain, USSR)
 	end)
 
 	if Difficulty ~= "easy" then
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.AirFleetKillers, USSR, PID, { "pac", "deva", "stmr", "enrv" })
-		end)
+		InitAirAttackSquad(Squads.AirFleetKillers, USSR, MissionPlayers[1], { "pac", "deva", "stmr", "enrv", "torm" })
+	end
+
+	if Difficulty ~= "easy" then
+		InitAirAttackSquad(Squads.TripodKillers, USSR, MissionPlayers[1], { "tpod", "rtpd" })
 	end
 
 	Trigger.AfterDelay(ParabombsEnabledDelay[Difficulty], function()

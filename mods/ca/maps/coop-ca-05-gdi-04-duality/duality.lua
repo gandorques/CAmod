@@ -467,7 +467,9 @@ UpdateProdigyTarget = function()
 		if not maintainCurrentTarget then
 			local possibleTargets = {}
 			Utils.Do(CoopPlayers, function(PID)
-				table.insert(possibleTargets,PID.GetActorsByTypes({ "rmbo", "e7" }))
+				Utils.Do(PID.GetActorsByTypes({ "rmbo", "e7" }), function(UID)
+					table.insert(possibleTargets,UID)
+				end)
 			end)
 			if #possibleTargets > 0 then
 				ProdigyCurrentTarget = Utils.Random(possibleTargets)

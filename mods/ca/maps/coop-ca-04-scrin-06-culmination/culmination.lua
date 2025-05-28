@@ -2,8 +2,8 @@ AlliedSavedAdvancedBuildings = {}
 USSRSavedAdvancedBuildings = {}
 NodSavedAdvancedBuildings = {}
 
-AlliesVsNodPaths = { { AlliesVsNodRally1.Location }, { AlliesVsNodRally2.Location }, { AlliesVsNodRally3.Location } }
-AlliesVsSovietPaths = { { AlliesVsSovietsRally1.Location }, { AlliesVsSovietsRally2.Location }, { AlliesVsSovietsRally3.Location } }
+AlliesVsNodPaths = { { AlliesVsNodRally1.Location }, { AlliesVsNodRally2.Location }, { AlliesVsNodRally3.Location }, { AlliesVsNodRally4.Location } }
+AlliesVsSovietPaths = { { AlliesVsSovietsRally1.Location }, { AlliesVsSovietsRally2.Location }, { AlliesVsSovietsRally3.Location }, { AlliesVsSovietsRally4.Location } }
 SovietsVsNodPaths = { { SovietsVsNodRally1.Location }, { SovietsVsNodRally2.Location }, { SovietsVsNodRally3.Location }, { SovietsVsNodRally4.Location } }
 SovietsVsAlliesPaths = { { SovietsVsAlliesRally1.Location }, { SovietsVsAlliesRally2.Location }, { SovietsVsAlliesRally3.Location }, { SovietsVsAlliesRally4.Location } }
 NodVsAlliesPaths = { { NodVsAlliesRally1.Location }, { NodVsAlliesRally2.Location }, { NodVsAlliesRally3.Location } }
@@ -21,15 +21,16 @@ SuperweaponsEnabledTime = {
 
 Squads = {
 	Allies = {
+		InitTime = 0 - DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(3),
 			normal = DateTime.Minutes(2),
 			hard = DateTime.Seconds(10),
 		},
 		AttackValuePerSecond = {
-			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(7) },
-			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(5) },
-			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(3) },
+			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(16) },
+			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(14) },
+			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(12) },
 		},
 		FollowLeader = true,
 		ProducerTypes = { Infantry = BarracksTypes, Vehicles = FactoryTypes },
@@ -39,15 +40,16 @@ Squads = {
 		},
 	},
 	Nod = {
+		InitTime = 0 - DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(3),
 			normal = DateTime.Minutes(2),
 			hard = DateTime.Seconds(10),
 		},
 		AttackValuePerSecond = {
-			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(7) },
-			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(5) },
-			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(3) },
+			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(16) },
+			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(14) },
+			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(12) },
 		},
 		DispatchDelay = DateTime.Seconds(15),
 		FollowLeader = true,
@@ -58,15 +60,16 @@ Squads = {
 		},
 	},
 	Soviets = {
+		InitTime = 0 - DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(3),
 			normal = DateTime.Minutes(2),
 			hard = DateTime.Seconds(10),
 		},
 		AttackValuePerSecond = {
-			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(7) },
-			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(5) },
-			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(3) },
+			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(16) },
+			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(14) },
+			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(12) },
 		},
 		FollowLeader = true,
 		ProducerTypes = { Infantry = BarracksTypes, Vehicles = FactoryTypes },
@@ -311,6 +314,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -363,6 +367,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 -- Functions
 
 InitUSSR = function(paths, cameras)
@@ -384,6 +394,7 @@ InitUSSR = function(paths, cameras)
 			AutoRepairAndRebuildBuildings(USSR)
 			SetupRefAndSilosCaptureCredits(USSR)
 			AutoReplaceHarvesters(USSR)
+			AutoRebuildConyards(USSR)
 			InitAiUpgrades(USSR)
 		end)
 	end)
@@ -393,9 +404,7 @@ InitUSSR = function(paths, cameras)
 	end)
 
 	Trigger.AfterDelay(Squads.SovietAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.SovietAir, USSR, PID)
-		end)
+		InitAirAttackSquad(Squads.SovietAir, USSR)
 	end)
 
 	Trigger.AfterDelay(SuperweaponsEnabledTime[Difficulty], function()
@@ -427,6 +436,7 @@ InitGreece = function(paths, cameras)
 			AutoRepairAndRebuildBuildings(Greece)
 			SetupRefAndSilosCaptureCredits(Greece)
 			AutoReplaceHarvesters(Greece)
+			AutoRebuildConyards(Greece)
 			InitAiUpgrades(Greece)
 		end)
 	end)
@@ -436,9 +446,7 @@ InitGreece = function(paths, cameras)
 	end)
 
     Trigger.AfterDelay(Squads.AlliedAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.AlliedAir, Nod, PID)
-		end)
+        InitAirAttackSquad(Squads.AlliedAir, Greece)
     end)
 
 	Trigger.AfterDelay(SuperweaponsEnabledTime[Difficulty], function()
@@ -470,6 +478,7 @@ InitNod = function(paths, cameras)
 			AutoRepairAndRebuildBuildings(Nod)
 			SetupRefAndSilosCaptureCredits(Nod)
 			AutoReplaceHarvesters(Nod)
+			AutoRebuildConyards(Nod)
 			InitAiUpgrades(Nod)
 		end)
 	end)
@@ -479,9 +488,7 @@ InitNod = function(paths, cameras)
 	end)
 
     Trigger.AfterDelay(Squads.NodAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.NodAir, Nod, PID)
-		end)
+        InitAirAttackSquad(Squads.NodAir, Nod)
     end)
 
 	Trigger.AfterDelay(SuperweaponsEnabledTime[Difficulty], function()

@@ -294,6 +294,7 @@ Tick = function()
 	end
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -323,6 +324,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitGreece = function()
 	if Difficulty == "easy" then
 		RebuildExcludes.Greece = { Types = { "gun", "pbox", "pris" } }
@@ -331,6 +338,7 @@ InitGreece = function()
 	AutoRepairAndRebuildBuildings(Greece, 15)
 	SetupRefAndSilosCaptureCredits(Greece)
 	AutoReplaceHarvesters(Greece)
+	AutoRebuildConyards(Greece)
 	InitAiUpgrades(Greece)
 	InitAiUpgrades(Traitor)
 
@@ -445,7 +453,7 @@ InitAlliedAttacks = function()
 		end)
 
 		Trigger.AfterDelay(Squads.Air.Delay[Difficulty], function()
-			InitAirAttackSquad(Squads.Air, Greece, Nod, { "harv", "v2rl", "apwr", "tsla", "ttra", "v3rl", "mig", "hind", "suk", "suk.upg", "kiro", "apoc" })
+			InitAirAttackSquad(Squads.Air, Greece)
 		end)
 	end
 end

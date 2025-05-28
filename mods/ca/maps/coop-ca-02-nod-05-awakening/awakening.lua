@@ -402,9 +402,7 @@ DoAirAttack = function()
 
 	local units = Reinforcements.Reinforce(USSR, randomComposition, randomAttackPath, 25, function(a)
 		Trigger.AfterDelay(DateTime.Seconds(2), function()
-			Utils.Do(CoopPlayers,function(PID)
-			InitAttackAircraft(a, PID, { "nuke", "nuk2", "obli", "gun.nod", "mlrs", "arty.nod", "harv.td", "ltnk" })
-			end)
+			InitAttackAircraft(a, MissionPlayers[1], { "nuke", "nuk2", "obli", "gun.nod", "mlrs", "arty.nod", "harv.td", "ltnk" })
 		end)
 	end)
 

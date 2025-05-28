@@ -96,7 +96,7 @@ Squads = {
 				{ Vehicles = { "seek", "seek", "seek" }, MaxTime = DateTime.Minutes(7) },
 				{ Vehicles = { "lace", "lace", "seek", "seek" }, },
 				{ Vehicles = { "devo", "intl.ai2", "ruin", "seek" }, MinTime = DateTime.Minutes(7) },
-				{ Vehicles = { "intl", "intl.ai2", { "seek", "lace" }, { "devo", "dark", "ruin" }, { "devo", "dark", "ruin" }  }, MinTime = DateTime.Minutes(12) }
+				{ Vehicles = { "intl", "intl.ai2", { "seek", "lace" }, { "devo", "devo", "ruin" }, { "devo", "atmz", "ruin" }  }, MinTime = DateTime.Minutes(12) }
 			}
 		},
 		AttackPaths = {
@@ -194,6 +194,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -219,6 +220,12 @@ end
 OncePerFiveSecondChecks = function()
 	if DateTime.GameTime > 1 and DateTime.GameTime % 125 == 0 then
 		UpdatePlayerBaseLocations()
+	end
+end
+
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
 	end
 end
 

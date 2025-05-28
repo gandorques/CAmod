@@ -15,15 +15,16 @@ AdjustedNodCompositions = AdjustCompositionsForDifficulty(UnitCompositions.Nod)
 
 Squads = {
 	Main1 = {
+		InitTime = 0 - DateTime.Minutes(10),
 		Delay = {
-			easy = DateTime.Minutes(5),
-			normal = DateTime.Minutes(3),
-			hard = DateTime.Minutes(1),
+			easy = DateTime.Minutes(3),
+			normal = DateTime.Minutes(1) + DateTime.Seconds(30),
+			hard = DateTime.Seconds(1),
 		},
 		AttackValuePerSecond = {
-			easy = { Min = 10, Max = 25 },
-			normal = { Min = 25, Max = 50 },
-			hard = { Min = 40, Max = 80 },
+			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(16) },
+			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(14) },
+			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(12) },
 		},
 		FollowLeader = true,
 		DispatchDelay = DateTime.Seconds(15),
@@ -38,15 +39,16 @@ Squads = {
 		},
 	},
 	Main2 = {
+		InitTime = 0 - DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(6),
 			normal = DateTime.Minutes(4),
 			hard = DateTime.Minutes(2),
 		},
 		AttackValuePerSecond = {
-			easy = { Min = 10, Max = 25 },
-			normal = { Min = 25, Max = 50 },
-			hard = { Min = 40, Max = 80 },
+			easy = { Min = 12, Max = 25, RampDuration = DateTime.Minutes(16) },
+			normal = { Min = 25, Max = 50, RampDuration = DateTime.Minutes(14) },
+			hard = { Min = 40, Max = 80, RampDuration = DateTime.Minutes(12) },
 		},
 		FollowLeader = true,
 		DispatchDelay = DateTime.Seconds(15),
@@ -106,7 +108,7 @@ Squads = {
 		ProducerTypes = { Aircraft = { "hpad.td" } },
 		Units = {
 			hard = {
-				{ Aircraft = { "scrn", "scrn", "scrn", "scrn", "scrn", "scrn", "scrn" } },
+				{ Aircraft = { "scrn", "scrn", "scrn", "scrn", "scrn", "scrn", "scrn", "scrn" } },
 			}
 		},
 	}
@@ -229,11 +231,34 @@ WorldLoaded = function()
 		Reinforcements.Reinforce(USSR, { "kiro" }, { KirovSpawn2.Location, KirovRally2.Location })
 		end
 	end)
+	Trigger.AfterDelay(1, function()
+		for k, v in pairs({ InitSquad1, InitSquad2, InitSquad3, InitSquad4, InitSquad5 }) do
+			local actors = Map.ActorsInCircle(v.CenterPosition, WDist.New(8 * 1024));
+			local attackers = Utils.Where(actors, function(a)
+				return a.Owner == Nod and a.HasProperty("Hunt")
+			end)
+
+			if (k > 3 and Difficulty == "easy") or (k > 4 and Difficulty == "normal") then
+				Utils.Do(attackers, function(a)
+					a.Destroy()
+				end)
+			else
+				Trigger.AfterDelay(DateTime.Seconds(k * 8), function()
+					Utils.Do(attackers, function(a)
+						if not a.IsDead then
+							a.Hunt()
+						end
+					end)
+				end)
+			end
+		end
+	end)
 end
 
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -258,10 +283,17 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitNod = function()
 	AutoRepairAndRebuildBuildings(Nod, 15)
 	SetupRefAndSilosCaptureCredits(Nod)
 	AutoReplaceHarvesters(Nod)
+	AutoRebuildConyards(Nod)
     InitAiUpgrades(Nod)
 
 	local nodGroundAttackers = Nod.GetGroundAttackers()
@@ -284,17 +316,12 @@ InitNod = function()
     end)
 
     Trigger.AfterDelay(Squads.Air.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.Air, Nod, PID, { "harv", "4tnk", "4tnk.atomic", "3tnk", "3tnk.atomic", "3tnk.rhino", "3tnk.rhino.atomic",
-				"katy", "v3rl", "ttra", "v3rl", "apwr", "tpwr", "npwr", "tsla", "proc", "nukc", "ovld", "apoc", "apoc.atomic", "ovld.atomic" })
-		end)
+        InitAirAttackSquad(Squads.Air, Nod)
     end)
 
 	if Difficulty == "hard" then
 		Trigger.AfterDelay(Squads.AntiTankAir.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.AntiTankAir, Nod, PID, { "4tnk", "4tnk.atomic", "apoc", "apoc.atomic", "ovld", "ovld.atomic" })
-			end)
+			InitAirAttackSquad(Squads.AntiTankAir, Nod, MissionPlayers[1], { "4tnk", "4tnk.atomic", "apoc", "apoc.atomic", "ovld", "ovld.atomic" })
 		end)
 	end
 end

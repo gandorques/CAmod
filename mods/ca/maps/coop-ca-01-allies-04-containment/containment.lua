@@ -86,7 +86,11 @@ WorldLoaded = function()
 	RespawnTrigger(Seal1)
 	RespawnTrigger(Seal2)
 	RespawnTrigger(Spy)
-
+	
+	Utils.Do(CoopPlayers,function(PID)
+		Actor.Create("radar.dummy", true, { Owner = PID })
+	end)
+	
 	local seals = { Seal1, Seal2 }
 	local Sealcounter = 2
 	
@@ -454,7 +458,11 @@ DropChronoPrison = function()
 
 				local chronoPrisons = Greece.GetActorsByType("chpr")
 				Trigger.OnKilled(chronoPrisons[1], function(self, killer)
-					Greece.MarkFailedObjective(ObjectiveNeutralizeChronosphere)
+					if RespawnEnabled then
+						DropChronoPrison()
+					else
+						Greece.MarkFailedObjective(ObjectiveNeutralizeChronosphere)
+					end
 				end)
 			end
 		end)

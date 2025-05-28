@@ -1,3 +1,4 @@
+RespawnEnabled = Map.LobbyOption("respawn") == "enabled"
 
 PowerGrids = {
 	{
@@ -87,7 +88,9 @@ WorldLoaded = function()
 	InitUSSR()
 
 	ObjectiveCaptureTibFacilities = Scrin.AddObjective("Capture three Tiberium enrichment facilities.")
-	ObjectiveMastermindSurvives = Scrin.AddObjective("Mastermind must survive.")
+	if not RespawnEnabled then
+		ObjectiveMastermindSurvives = Scrin.AddObjective("Mastermind must survive.")
+	end
 
 	if Difficulty ~= "hard" then
 		Mastermind.GrantCondition("difficulty-" .. Difficulty)
@@ -122,6 +125,8 @@ WorldLoaded = function()
 			end)
 		end)
 	end)
+
+	MastermindDeathTrigger(Mastermind)
 
 	Utils.Do(PowerGrids, function(grid)
 		Trigger.OnAllKilledOrCaptured(grid.Providers, function()
@@ -181,7 +186,9 @@ WorldLoaded = function()
 		end
 
 		Scrin.MarkCompletedObjective(ObjectiveCaptureYuriHQ)
-		Scrin.MarkCompletedObjective(ObjectiveMastermindSurvives)
+		if not RespawnEnabled then
+			Scrin.MarkCompletedObjective(ObjectiveMastermindSurvives)
+		end
 	end)
 
 	Utils.Do(TibTrucks, function(t)
@@ -237,7 +244,7 @@ WorldLoaded = function()
 	end)
 
 	Trigger.OnEnteredProximityTrigger(YuriHQ.CenterPosition, WDist.New(18 * 1024), function(a, id)
-		if IsOwnedByCoopPlayer(a) and a.Type ~= cameraType then
+		if IsOwnedByCoopPlayer(a) and a.Type ~= "smallcamera" then
 			Trigger.RemoveProximityTrigger(id)
 			if not YuriDefenderTipShown then
 				YuriDefenderTipShown = true
@@ -264,10 +271,6 @@ OncePerSecondChecks = function()
 			else
 				TimerTicks = 0
 			end
-		end
-
-		if Mastermind.IsDead then
-			Scrin.MarkFailedObjective(ObjectiveMastermindSurvives)
 		end
 	end
 end
@@ -334,5 +337,50 @@ InitUSSR = function()
 				end)
 			end
 		end)
+	end)
+end
+
+RespawnMastermind = function()
+	local mastermindName = "Mastermind"
+
+	if TibFacilitiesCaptured == 3 then
+		mastermindName = "Prodigy"
+	end
+
+	Notification("The " .. mastermindName .. " used its considerable psionic powers to cheat death. It will return in 30 seconds.")
+
+	Trigger.AfterDelay(DateTime.Seconds(30), function()
+		local wormhole = Actor.Create("wormhole", true, { Owner = DummyGuy, Location = PlayerStart.Location })
+		Beacon.New(DummyGuy, PlayerStart.CenterPosition, DateTime.Seconds(30))
+
+		Trigger.AfterDelay(DateTime.Seconds(2), function()
+			Media.PlaySpeechNotification(All, "ReinforcementsArrived")
+			Mastermind = Reinforcements.Reinforce(DummyGuy, { "mast" }, { PlayerStart.Location }, 1)[1]
+			Mastermind.Scatter()
+
+			if Difficulty ~= "hard" then
+				Mastermind.GrantCondition("difficulty-" .. Difficulty)
+			end
+
+			for i=1, TibFacilitiesCaptured do
+				Mastermind.GrantCondition("rank-veteran")
+			end
+
+			Trigger.AfterDelay(DateTime.Seconds(5), function()
+				wormhole.Kill()
+			end)
+
+			MastermindDeathTrigger(Mastermind)
+		end)
+	end)
+end
+
+MastermindDeathTrigger = function(mastermind)
+	Trigger.OnKilled(mastermind, function(self, killer)
+		if RespawnEnabled then
+			RespawnMastermind()
+		else
+			Scrin.MarkFailedObjective(ObjectiveMastermindSurvives)
+		end
 	end)
 end

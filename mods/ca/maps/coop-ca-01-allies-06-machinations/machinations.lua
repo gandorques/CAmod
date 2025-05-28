@@ -1,7 +1,7 @@
 InitialUnits = {
-	easy = { "jeep", --[["mcv",]] "2tnk", "e1", "e1", "e1", "e3" },
-	normal = { "jeep", --[["mcv",]] "e1", "e1", "e1", "e3"  },
-	hard = { "jeep", --[["mcv",]] "e1", "e1", "e3" }
+	easy = { "jeep", "2tnk", "e1", "e1", "e1", "e3" },
+	normal = { "jeep", "e1", "e1", "e1", "e3"  },
+	hard = { "jeep", "e1", "e1", "e3" }
 }
 
 NodSouthAttackPaths = {
@@ -268,6 +268,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -301,6 +302,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitNod = function()
 	if Difficulty == "easy" then
 		RebuildExcludes.Nod = { Types = { "obli", "gun.nod" } }
@@ -309,6 +316,7 @@ InitNod = function()
 	AutoRepairAndRebuildBuildings(Nod, 15)
 	SetupRefAndSilosCaptureCredits(Nod)
 	AutoReplaceHarvesters(Nod)
+	AutoRebuildConyards(Nod)
 	InitAiUpgrades(Nod)
 
 	Trigger.AfterDelay(SuperweaponsEnabledTime[Difficulty], function()
@@ -349,9 +357,7 @@ InitNodAttacks = function()
 		end)
 
 		Trigger.AfterDelay(Squads.Air.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.Air, Nod, PID, { "harv", "harv.td", "pris", "ifv", "cryo", "ptnk", "pcan", "ca", "dome", "apwr", "mech", "medi" })
-			end)
+			InitAirAttackSquad(Squads.Air, Nod)
 		end)
 	end
 end

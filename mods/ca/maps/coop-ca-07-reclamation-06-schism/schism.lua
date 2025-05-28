@@ -294,7 +294,7 @@ WorldLoaded = function()
 				end)
 
 				Trigger.AfterDelay(DateTime.Seconds(5), function()
-					Tip("Use the Iron Curtain to shield the Exterminator Tripod from purification waves.")
+					Tip("The Iron Curtain must be intact and powered to shield the Exterminator Tripod from purification waves.")
 				end)
 			end)
 		end)
@@ -304,6 +304,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -317,6 +318,9 @@ OncePerSecondChecks = function()
 					TimerTicks = TimerTicks - 25
 					if TimerTicks == 125 then
 						Media.PlaySound("buzzy1.aud")
+					end
+					if TimerTicks == 75 then
+						ApplyIronCurtain()
 					end
 				else
 					TimerTicks = 0
@@ -362,6 +366,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 -- Functions
 
 UpdateMissionText = function()
@@ -385,6 +395,7 @@ InitScrinRebels = function()
 	AutoRepairAndRebuildBuildings(ScrinRebels)
 	SetupRefAndSilosCaptureCredits(ScrinRebels)
 	AutoReplaceHarvesters(ScrinRebels)
+	AutoRebuildConyards(ScrinRebels)
 	InitAiUpgrades(ScrinRebels)
 
 	AutoRepairBuildings(ScrinRebelsOuter)
@@ -401,17 +412,12 @@ InitScrinRebels = function()
 	end)
 
 	Trigger.AfterDelay(Squads.ScrinRebelsAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels, PID, { "etpd", "harv", "4tnk", "4tnk.atomic", "3tnk", "3tnk.atomic", "3tnk.rhino", "3tnk.rhino.atomic",
-			"katy", "v3rl", "ttra", "v3rl", "apwr", "tpwr", "npwr", "tsla", "proc", "nukc", "ovld", "apoc", "apoc.atomic", "ovld.atomic" })
-		end)
+		InitAirAttackSquad(Squads.ScrinRebelsAir, ScrinRebels)
 	end)
 
 	if Difficulty == "hard" then
 		Trigger.AfterDelay(Squads.Enervators.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.Enervators, ScrinRebels, PID, { "etpd" })
-			end)
+			InitAirAttackSquad(Squads.Enervators, ScrinRebels, USSR, { "etpd" })
 		end)
 	end
 end
@@ -420,6 +426,7 @@ InitNod = function()
 	AutoRepairAndRebuildBuildings(Nod)
 	SetupRefAndSilosCaptureCredits(Nod)
 	AutoReplaceHarvesters(Nod)
+	AutoRebuildConyards(Nod)
 	InitAiUpgrades(Nod)
 
 	local nodGroundAttackers = Nod.GetGroundAttackers()
@@ -434,17 +441,12 @@ InitNod = function()
 	end)
 
 	Trigger.AfterDelay(Squads.NodAir.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers,function(PID)
-			InitAirAttackSquad(Squads.NodAir, Nod, PID, { "etpd", "harv", "4tnk", "4tnk.atomic", "3tnk", "3tnk.atomic", "3tnk.rhino", "3tnk.rhino.atomic",
-			"katy", "v3rl", "ttra", "v3rl", "apwr", "tpwr", "npwr", "tsla", "proc", "nukc", "ovld", "apoc", "apoc.atomic", "ovld.atomic" })
-		end)
+		InitAirAttackSquad(Squads.NodAir, Nod)
 	end)
 
 	if Difficulty ~= "easy" then
 		Trigger.AfterDelay(Squads.Banshees.Delay[Difficulty], function()
-			Utils.Do(CoopPlayers,function(PID)
-				InitAirAttackSquad(Squads.Banshees, Nod, PID, { "etpd" })
-			end)
+			InitAirAttackSquad(Squads.Banshees, Nod, USSR, { "etpd" })
 		end)
 	end
 end
@@ -506,10 +508,10 @@ MaleficSpawn = function()
 	}
 
 	local invasionCompositions = {
-		{ "intl", "s1", "s1", "s1", "s1", "s3", "s3", "s4", "s4", "muti", "muti", "muti" },
-		{ "dark", "s1", "s1", "s1", "s1", "s3", "s4", "muti", "muti", "muti" },
-		{ "tpod", "s1", "s1", "s1", "s3", "s3", "s4", "muti", "muti" },
-		{ "devo", "s1", "s1", "s1", "s3", "s3", "s4", "muti", "muti", "muti" },
+		{ "intl", "s1", "s1", "s1", "s1", "s3", "s3", "s4", "s4", "stlk", "stlk", "stlk" },
+		{ "dark", "s1", "s1", "s1", "s1", "s3", "s4", "stlk", "stlk", "stlk" },
+		{ "tpod", "s1", "s1", "s1", "s3", "s3", "s4", "stlk", "stlk" },
+		{ "dark", "s1", "s1", "s1", "s3", "s3", "s4", "stlk", "stlk", "stlk" },
 	}
 
 	Utils.Do(MaleficSpawns, function(s)
@@ -562,5 +564,17 @@ GetInvasionInterval = function()
 		else
 			return DateTime.Seconds(30)
 		end
+	end
+end
+
+ApplyIronCurtain = function()
+	if USSR.PowerState ~= "Normal" then
+		return
+	end
+	local ics = USSR.GetActorsByType("iron")
+	if #ics > 0 then
+		local ic = ics[1]
+		Media.PlaySound("ironcur9.aud")
+		Exterminator.GrantCondition("invulnerability", DateTime.Seconds(8))
 	end
 end

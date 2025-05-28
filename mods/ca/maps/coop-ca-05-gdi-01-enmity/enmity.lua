@@ -232,6 +232,7 @@ end
 Tick = function()
 	OncePerSecondChecks()
 	OncePerFiveSecondChecks()
+	OncePerThirtySecondChecks()
 end
 
 OncePerSecondChecks = function()
@@ -254,6 +255,12 @@ OncePerFiveSecondChecks = function()
 	end
 end
 
+OncePerThirtySecondChecks = function()
+	if DateTime.GameTime > 1 and DateTime.GameTime % DateTime.Seconds(30) == 0 then
+		CalculatePlayerCharacteristics()
+	end
+end
+
 InitNod = function()
 	if Difficulty == "easy" then
 		RebuildExcludes.Nod = { Types = { "obli", "gun.nod", "nuke", "nuk2", "mslo.nod" } }
@@ -264,6 +271,7 @@ InitNod = function()
 	AutoRepairAndRebuildBuildings(Nod, 15)
 	SetupRefAndSilosCaptureCredits(Nod)
 	AutoReplaceHarvesters(Nod)
+	AutoRebuildConyards(Nod)
 	InitAiUpgrades(Nod)
 
 	local nodGroundAttackers = Nod.GetGroundAttackers()
@@ -288,9 +296,7 @@ InitNod = function()
 	end)
 
 	Trigger.AfterDelay(Squads.Air.Delay[Difficulty], function()
-		Utils.Do(CoopPlayers, function(PID)
-			InitAirAttackSquad(Squads.Air, Nod, PID, { "harv.td", "atwr", "msam", "htnk", "htnk.ion", "gtek", "dome" })
-		end)
+		InitAirAttackSquad(Squads.Air, Nod)
 	end)
 
 	Utils.Do(StructuresToSellToAvoidCapture, function(self)

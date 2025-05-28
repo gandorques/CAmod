@@ -37,7 +37,6 @@ PROC.SCRIN:
 	-SpawnActorsOnSellCA:
 
 WORMHOLE:
-	-PopControlled:
 	-Targetable:
 
 SFAC:
@@ -113,7 +112,7 @@ RFGN:
 	Inherits@CAMPAIGNDISABLED: ^Disabled
 
 SPLITBLUE:
-	SeedsResource:
+	SeedsResourceCA:
 		Interval: 50
 
 carapace.upgrade:

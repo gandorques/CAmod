@@ -31,6 +31,15 @@ World:
 			normal: options-difficulty.normal
 			hard: options-difficulty.hard
 		Default: normal
+	ScriptLobbyDropdown@RESPAWN:
+		ID: respawn
+		Label: Respawns
+		Description: Enable/disable respawning on death
+		Values:
+			enabled: Enabled
+			disabled: Disabled
+		Default: disabled
+		DisplayOrder: 999
 	MusicPlaylist:
 		StartingMusic: duskhour
 
@@ -45,7 +54,7 @@ Player:
 ^MindControllable:
 	Targetable@MINDCONTROL:
 		TargetTypes: MindControllable
-		RequiresCondition: !hacked && !restoring
+		-RequiresCondition:
 	ExternalCondition@MCPROTECTION:
 		Condition: mc-protection
 	Targetable@MCPROTECTION:
