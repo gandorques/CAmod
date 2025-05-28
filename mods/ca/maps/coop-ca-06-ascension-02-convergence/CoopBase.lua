@@ -1305,6 +1305,7 @@ CoopInit25 = function(mission)
 	end)
 	if ORAMod == "ca" then
 		MissionPlayers = CoopPlayers
+		OverrideAttackTarget()
 	end
 	
 	MCVPlayers = {}
@@ -1376,4 +1377,41 @@ CoopInit25 = function(mission)
 		StartCoopBots()
 		EnemyVeterancy(mainEnemies)
 	end)
+end
+
+-- Hooking into the InitAttackSquad function of CA
+OverrideAttackTarget = function()	
+	local originalInitAttackSquad = InitAttackSquad
+	InitAttackSquad = function(squad, player, targetPlayer)
+		if targetPlayer == nil or IsMissionPlayer(targetPlayer) then
+			if targetPlayer ~= nil then
+				--Media.DisplayMessage("Attack Squad Called for:" .. targetPlayer.Name)
+			else
+				--Media.DisplayMessage("Attack Squad Called for undefined Player.")
+			end
+			local newTarget = Utils.Random(CoopPlayers)
+			originalInitAttackSquad(squad, player, newTarget)
+			--Media.DisplayMessage("Attacked Player changed to:" .. newTarget.Name)
+		else
+			originalInitAttackSquad(squad, player, targetPlayer)
+			--Media.DisplayMessage("Attacked Player is no Coop Player and stays " .. targetPlayer.Name)
+		end
+	end
+	
+	local originalAssaultPlayerBaseOrHunt = AssaultPlayerBaseOrHunt
+	AssaultPlayerBaseOrHunt = function(actor, targetPlayer, waypoints, fromIdle)
+		if targetPlayer == nil or IsMissionPlayer(targetPlayer) then
+			if targetPlayer ~= nil then
+				Media.DisplayMessage("Assault Called for:" .. targetPlayer.Name)
+			else
+				Media.DisplayMessage("Assault Called for undefined Player.")
+			end
+			local newTarget = Utils.Random(CoopPlayers)
+			originalAssaultPlayerBaseOrHunt(actor, newTarget, waypoints, fromIdle)
+			Media.DisplayMessage("Assaulted Player changed to:" .. newTarget.Name)
+		else
+			originalAssaultPlayerBaseOrHunt(actor, targetPlayer, waypoints, fromIdle)
+			Media.DisplayMessage("Assaulted Player is no Coop Player and stays " .. targetPlayer.Name)
+		end
+	end
 end

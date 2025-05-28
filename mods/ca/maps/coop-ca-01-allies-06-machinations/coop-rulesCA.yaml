@@ -71,7 +71,7 @@ World:
 	ScriptLobbyDropdown@oremines:
 		ID: oremines
 		Label: Resource spawners
-		Description: Adjustements to resource spawners on the map.\n\nNo change: Ressource spawners are unchanged\nAdditional: Adds a mine or blossom tree to every field that has none. Amount varies from map to map.\nUpgrade: All ore mines become gem mines, all green blossom trees become blue blossom trees.\nAdd & Upgrade: Adds spawners and upgrades all of them\nDelete all: Remove all spawners. Warning: All resources are finite now. This can make some missions extremely difficult or impossible without near-perfect execution.
+		Description: Adjustements to resource spawners on the map.\n\nNo change: Resource spawners are unchanged\nAdditional: Adds a mine or blossom tree to every field that has none. Amount varies from map to map.\nUpgrade: All ore mines become gem mines, all green blossom trees become blue blossom trees.\nAdd & Upgrade: Adds spawners and upgrades all of them\nDelete all: Remove all spawners. Warning: All resources are finite now. This can make some missions extremely difficult or impossible without near-perfect execution.
 		Values:
 			oreoff: No change
 			oreon: Additional
@@ -149,6 +149,9 @@ Player:
 		Enabled: True
 		DisplayOrder: 7
 		Prerequisites: global-factundeploy
+	LobbyPrerequisiteCheckbox@FASTREGROWTH:
+		Locked: False
+		Visible: True
 
 COOPDUMMY:
 	Inherits: ^InvisibleDummy
@@ -227,7 +230,6 @@ COOPQUEUESYNCER:
 		RequiresCondition: !global-multiqueue
 	GrantExternalConditionToProduced:
 		Condition: produced
-	CloneSource:
 	UpdatesUnitsProduced:
 
 ^COOPProducesDogs:

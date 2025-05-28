@@ -45,3 +45,243 @@ _ReSharper.*/
 
 # IntelliJ files
 .idea
+mods/ca/maps/containment-coop/CoopBase.lua
+mods/ca/maps/containment-coop/coop-rulesCA.yaml
+mods/ca/maps/Combat Zones/CoopBase.lua
+mods/ca/maps/Combat Zones/coop-rulesCA.yaml
+mods/ca/maps/Combat Alley/CoopBase.lua
+mods/ca/maps/Combat Alley/coop-rulesCA.yaml
+mods/ca/maps/Cold Pass/CoopBase.lua
+mods/ca/maps/Cold Pass/coop-rulesCA.yaml
+mods/ca/maps/center-of-attention-redux-2/CoopBase.lua
+mods/ca/maps/center-of-attention-redux-2/coop-rulesCA.yaml
+mods/ca/maps/ca42-schism/CoopBase.lua
+mods/ca/maps/ca42-schism/coop-rulesCA.yaml
+mods/ca/maps/ca41-annexation/CoopBase.lua
+mods/ca/maps/ca41-annexation/coop-rulesCA.yaml
+mods/ca/maps/ca40-conduit/CoopBase.lua
+mods/ca/maps/ca40-conduit/coop-rulesCA.yaml
+mods/ca/maps/ca39-jailbreak/CoopBase.lua
+mods/ca/maps/ca39-jailbreak/coop-rulesCA.yaml
+mods/ca/maps/ca38-procurement/CoopBase.lua
+mods/ca/maps/ca38-procurement/coop-rulesCA.yaml
+mods/ca/maps/ca37-statecraft/CoopBase.lua
+mods/ca/maps/ca37-statecraft/coop-rulesCA.yaml
+mods/ca/maps/ca36-reckoning/CoopBase.lua
+mods/ca/maps/ca36-reckoning/coop-rulesCA.yaml
+mods/ca/maps/ca35-purification/CoopBase.lua
+mods/ca/maps/ca35-purification/coop-rulesCA.yaml
+mods/ca/maps/ca34-illumination/CoopBase.lua
+mods/ca/maps/ca34-illumination/coop-rulesCA.yaml
+mods/ca/maps/ca33-spearhead/CoopBase.lua
+mods/ca/maps/ca33-spearhead/coop-rulesCA.yaml
+mods/ca/maps/ca32-convergence/CoopBase.lua
+mods/ca/maps/ca32-convergence/coop-rulesCA.yaml
+mods/ca/maps/ca31-foothold/CoopBase.lua
+mods/ca/maps/ca31-foothold/coop-rulesCA.yaml
+mods/ca/maps/ca30-singularity/CoopBase.lua
+mods/ca/maps/ca30-singularity/coop-rulesCA.yaml
+mods/ca/maps/ca29-mobilization/CoopBase.lua
+mods/ca/maps/ca29-mobilization/coop-rulesCA.yaml
+mods/ca/maps/ca28-duality/CoopBase.lua
+mods/ca/maps/ca28-duality/coop-rulesCA.yaml
+mods/ca/maps/ca27-emancipation/CoopBase.lua
+mods/ca/maps/ca27-emancipation/coop-rulesCA.yaml
+mods/ca/maps/ca26-capitulation/CoopBase.lua
+mods/ca/maps/ca26-capitulation/coop-rulesCA.yaml
+mods/ca/maps/ca25-enmity/CoopBase.lua
+mods/ca/maps/ca25-enmity/coop-rulesCA.yaml
+mods/ca/maps/ca24-culmination/CoopBase.lua
+mods/ca/maps/ca24-culmination/coop-rulesCA.yaml
+mods/ca/maps/ca23-subjugation/CoopBase.lua
+mods/ca/maps/ca23-subjugation/coop-rulesCA.yaml
+mods/ca/maps/ca22-decimation/CoopBase.lua
+mods/ca/maps/ca22-decimation/coop-rulesCA.yaml
+mods/ca/maps/ca21-incapacitation/CoopBase.lua
+mods/ca/maps/ca21-incapacitation/coop-rulesCA.yaml
+mods/ca/maps/ca20-encroachment/CoopBase.lua
+mods/ca/maps/ca20-encroachment/coop-rulesCA.yaml
+mods/ca/maps/ca19-proliferation/CoopBase.lua
+mods/ca/maps/ca19-proliferation/coop-rulesCA.yaml
+mods/ca/maps/ca18-succession/CoopBase.lua
+mods/ca/maps/ca18-succession/coop-rulesCA.yaml
+mods/ca/maps/ca17-domination/CoopBase.lua
+mods/ca/maps/ca17-domination/coop-rulesCA.yaml
+mods/ca/maps/ca16-expulsion/CoopBase.lua
+mods/ca/maps/ca16-expulsion/coop-rulesCA.yaml
+mods/ca/maps/ca15-ironclad/CoopBase.lua
+mods/ca/maps/ca15-ironclad/coop-rulesCA.yaml
+mods/ca/maps/ca14-treachery/CoopBase.lua
+mods/ca/maps/ca14-treachery/coop-rulesCA.yaml
+mods/ca/maps/ca13-abasement/CoopBase.lua
+mods/ca/maps/ca13-abasement/coop-rulesCA.yaml
+mods/ca/maps/ca12-supremacy/CoopBase.lua
+mods/ca/maps/ca12-supremacy/coop-rulesCA.yaml
+mods/ca/maps/ca11-awakening/CoopBase.lua
+mods/ca/maps/ca11-awakening/coop-rulesCA.yaml
+mods/ca/maps/ca10-zenith/CoopBase.lua
+mods/ca/maps/ca10-zenith/coop-rulesCA.yaml
+mods/ca/maps/ca09-salvation/CoopBase.lua
+mods/ca/maps/ca09-salvation/coop-rulesCA.yaml
+mods/ca/maps/ca08-subversion/CoopBase.lua
+mods/ca/maps/ca08-subversion/coop-rulesCA.yaml
+mods/ca/maps/ca07-conspiracy/CoopBase.lua
+mods/ca/maps/ca07-conspiracy/coop-rulesCA.yaml
+mods/ca/maps/ca06-machinations/CoopBase.lua
+mods/ca/maps/ca06-machinations/coop-rulesCA.yaml
+mods/ca/maps/ca05-apprehension/CoopBase.lua
+mods/ca/maps/ca05-apprehension/coop-rulesCA.yaml
+mods/ca/maps/ca04-containment/CoopBase.lua
+mods/ca/maps/ca04-containment/coop-rulesCA.yaml
+mods/ca/maps/ca03-deliverance/CoopBase.lua
+mods/ca/maps/ca03-deliverance/coop-rulesCA.yaml
+mods/ca/maps/ca02-displacement/CoopBase.lua
+mods/ca/maps/ca02-displacement/coop-rulesCA.yaml
+mods/ca/maps/ca01-crossrip/CoopBase.lua
+mods/ca/maps/ca01-crossrip/coop-rulesCA.yaml
+mods/ca/maps/ca-testing-grounds/CoopBase.lua
+mods/ca/maps/ca-testing-grounds/coop-rulesCA.yaml
+mods/ca/maps/ca-prologue-04/CoopBase.lua
+mods/ca/maps/ca-prologue-04/coop-rulesCA.yaml
+mods/ca/maps/ca-prologue-03/CoopBase.lua
+mods/ca/maps/ca-prologue-03/coop-rulesCA.yaml
+mods/ca/maps/ca-prologue-02/CoopBase.lua
+mods/ca/maps/ca-prologue-02/coop-rulesCA.yaml
+mods/ca/maps/ca-prologue-01/CoopBase.lua
+mods/ca/maps/ca-prologue-01/coop-rulesCA.yaml
+mods/ca/maps/ca-composition-tournament/CoopBase.lua
+mods/ca/maps/ca-composition-tournament/coop-rulesCA.yaml
+mods/ca/maps/ca-composition-tester/CoopBase.lua
+mods/ca/maps/ca-composition-tester/coop-rulesCA.yaml
+mods/ca/maps/Bullseye/CoopBase.lua
+mods/ca/maps/Bullseye/coop-rulesCA.yaml
+mods/ca/maps/Bearing Straits/CoopBase.lua
+mods/ca/maps/Bearing Straits/coop-rulesCA.yaml
+mods/ca/maps/Be Shore/CoopBase.lua
+mods/ca/maps/Be Shore/coop-rulesCA.yaml
+mods/ca/maps/Badajoz/CoopBase.lua
+mods/ca/maps/Badajoz/coop-rulesCA.yaml
+mods/ca/maps/bad-neighbors/CoopBase.lua
+mods/ca/maps/bad-neighbors/coop-rulesCA.yaml
+mods/ca/maps/Antarctica/CoopBase.lua
+mods/ca/maps/Antarctica/coop-rulesCA.yaml
+mods/ca/maps/A Pattern of Islands/CoopBase.lua
+mods/ca/maps/A Pattern of Islands/coop-rulesCA.yaml
+mods/ca/maps/4 Corners/CoopBase.lua
+mods/ca/maps/4 Corners/coop-rulesCA.yaml
+mods/ca/maps/Disaster Central/coop-rulesCA.yaml
+mods/ca/maps/Disaster Central/CoopBase.lua
+mods/ca/maps/Dougout Isle/coop-rulesCA.yaml
+mods/ca/maps/Dougout Isle/CoopBase.lua
+mods/ca/maps/duality-coop/coop-rulesCA.yaml
+mods/ca/maps/duality-coop/CoopBase.lua
+mods/ca/maps/First come First serve/coop-rulesCA.yaml
+mods/ca/maps/First come First serve/CoopBase.lua
+mods/ca/maps/Gettysberg/coop-rulesCA.yaml
+mods/ca/maps/Gettysberg/CoopBase.lua
+mods/ca/maps/Gold Rush/coop-rulesCA.yaml
+mods/ca/maps/Gold Rush/CoopBase.lua
+mods/ca/maps/high-and-low/coop-rulesCA.yaml
+mods/ca/maps/high-and-low/CoopBase.lua
+mods/ca/maps/Indirect Fire/coop-rulesCA.yaml
+mods/ca/maps/Indirect Fire/CoopBase.lua
+mods/ca/maps/Island Hoppers/coop-rulesCA.yaml
+mods/ca/maps/Island Hoppers/CoopBase.lua
+mods/ca/maps/Island Rumble/coop-rulesCA.yaml
+mods/ca/maps/Island Rumble/CoopBase.lua
+mods/ca/maps/island-wars-ii/coop-rulesCA.yaml
+mods/ca/maps/island-wars-ii/CoopBase.lua
+mods/ca/maps/island-wars/coop-rulesCA.yaml
+mods/ca/maps/island-wars/CoopBase.lua
+mods/ca/maps/Islands/coop-rulesCA.yaml
+mods/ca/maps/Islands/CoopBase.lua
+mods/ca/maps/Isle of Fury/coop-rulesCA.yaml
+mods/ca/maps/Isle of Fury/CoopBase.lua
+mods/ca/maps/Ivory Wastelands/coop-rulesCA.yaml
+mods/ca/maps/Ivory Wastelands/CoopBase.lua
+mods/ca/maps/King of the Hills/coop-rulesCA.yaml
+mods/ca/maps/King of the Hills/CoopBase.lua
+mods/ca/maps/Lunar Battle Field/coop-rulesCA.yaml
+mods/ca/maps/Lunar Battle Field/CoopBase.lua
+mods/ca/maps/Marooned II/coop-rulesCA.yaml
+mods/ca/maps/Marooned II/CoopBase.lua
+mods/ca/maps/mastermind-madness/coop-rulesCA.yaml
+mods/ca/maps/mastermind-madness/CoopBase.lua
+mods/ca/maps/mega-mastermind-madness/coop-rulesCA.yaml
+mods/ca/maps/mega-mastermind-madness/CoopBase.lua
+mods/ca/maps/Naval Conquests/coop-rulesCA.yaml
+mods/ca/maps/Naval Conquests/CoopBase.lua
+mods/ca/maps/No Escape/coop-rulesCA.yaml
+mods/ca/maps/No Escape/CoopBase.lua
+mods/ca/maps/OrbitalJunkyard/coop-rulesCA.yaml
+mods/ca/maps/OrbitalJunkyard/CoopBase.lua
+mods/ca/maps/Ponds Skirmish/coop-rulesCA.yaml
+mods/ca/maps/Ponds Skirmish/CoopBase.lua
+mods/ca/maps/Random Violence/coop-rulesCA.yaml
+mods/ca/maps/Random Violence/CoopBase.lua
+mods/ca/maps/rapa-nui/coop-rulesCA.yaml
+mods/ca/maps/rapa-nui/CoopBase.lua
+mods/ca/maps/RatsAndRoaches/coop-rulesCA.yaml
+mods/ca/maps/RatsAndRoaches/CoopBase.lua
+mods/ca/maps/reckoning-coop/coop-rulesCA.yaml
+mods/ca/maps/reckoning-coop/CoopBase.lua
+mods/ca/maps/scrinfestation/coop-rulesCA.yaml
+mods/ca/maps/scrinfestation/CoopBase.lua
+mods/ca/maps/seaside-2/coop-rulesCA.yaml
+mods/ca/maps/seaside-2/CoopBase.lua
+mods/ca/maps/shattered-mountain/coop-rulesCA.yaml
+mods/ca/maps/shattered-mountain/CoopBase.lua
+mods/ca/maps/shellmap/coop-rulesCA.yaml
+mods/ca/maps/shellmap/CoopBase.lua
+mods/ca/maps/Sidestep/coop-rulesCA.yaml
+mods/ca/maps/Sidestep/CoopBase.lua
+mods/ca/maps/six-below-zero/coop-rulesCA.yaml
+mods/ca/maps/six-below-zero/CoopBase.lua
+mods/ca/maps/Smugglers Cove/coop-rulesCA.yaml
+mods/ca/maps/Smugglers Cove/CoopBase.lua
+mods/ca/maps/snow town/coop-rulesCA.yaml
+mods/ca/maps/snow town/CoopBase.lua
+mods/ca/maps/snow-off/coop-rulesCA.yaml
+mods/ca/maps/snow-off/CoopBase.lua
+mods/ca/maps/Snowy Island/coop-rulesCA.yaml
+mods/ca/maps/Snowy Island/CoopBase.lua
+mods/ca/maps/SPESSsmaller/coop-rulesCA.yaml
+mods/ca/maps/SPESSsmaller/CoopBase.lua
+mods/ca/maps/Spring Line/coop-rulesCA.yaml
+mods/ca/maps/Spring Line/CoopBase.lua
+mods/ca/maps/Straighter & Narrower/coop-rulesCA.yaml
+mods/ca/maps/Straighter & Narrower/CoopBase.lua
+mods/ca/maps/sudden-death/coop-rulesCA.yaml
+mods/ca/maps/sudden-death/CoopBase.lua
+mods/ca/maps/Super Mekong/coop-rulesCA.yaml
+mods/ca/maps/Super Mekong/CoopBase.lua
+mods/ca/maps/Super Ore Garden/coop-rulesCA.yaml
+mods/ca/maps/Super Ore Garden/CoopBase.lua
+mods/ca/maps/team-mastermind-madness/coop-rulesCA.yaml
+mods/ca/maps/team-mastermind-madness/CoopBase.lua
+mods/ca/maps/team-scrinfestation/coop-rulesCA.yaml
+mods/ca/maps/team-scrinfestation/CoopBase.lua
+mods/ca/maps/tfca/coop-rulesCA.yaml
+mods/ca/maps/tfca/CoopBase.lua
+mods/ca/maps/The Lake District/coop-rulesCA.yaml
+mods/ca/maps/The Lake District/CoopBase.lua
+mods/ca/maps/The Mississippi/coop-rulesCA.yaml
+mods/ca/maps/The Mississippi/CoopBase.lua
+mods/ca/maps/The Waste Must Flow/coop-rulesCA.yaml
+mods/ca/maps/The Waste Must Flow/CoopBase.lua
+mods/ca/maps/Things to Come/coop-rulesCA.yaml
+mods/ca/maps/Things to Come/CoopBase.lua
+mods/ca/maps/TibLabBrawl/coop-rulesCA.yaml
+mods/ca/maps/TibLabBrawl/CoopBase.lua
+mods/ca/maps/TrashCompactor/coop-rulesCA.yaml
+mods/ca/maps/TrashCompactor/CoopBase.lua
+mods/ca/maps/Tropic Thunder/coop-rulesCA.yaml
+mods/ca/maps/Tropic Thunder/CoopBase.lua
+mods/ca/maps/TunnelSnakes/coop-rulesCA.yaml
+mods/ca/maps/TunnelSnakes/CoopBase.lua
+mods/ca/maps/Undiscovered Country/coop-rulesCA.yaml
+mods/ca/maps/Undiscovered Country/CoopBase.lua
+mods/ca/maps/winter-company/coop-rulesCA.yaml
+mods/ca/maps/winter-company/CoopBase.lua
+mods/ca/maps/World Map/coop-rulesCA.yaml
+mods/ca/maps/World Map/CoopBase.lua
