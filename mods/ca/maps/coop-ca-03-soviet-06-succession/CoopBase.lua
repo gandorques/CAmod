@@ -1402,16 +1402,16 @@ OverrideAttackTarget = function()
 	AssaultPlayerBaseOrHunt = function(actor, targetPlayer, waypoints, fromIdle)
 		if targetPlayer == nil or IsMissionPlayer(targetPlayer) then
 			if targetPlayer ~= nil then
-				Media.DisplayMessage("Assault Called for:" .. targetPlayer.Name)
+				--Media.DisplayMessage("Assault Called for:" .. targetPlayer.Name)
 			else
-				Media.DisplayMessage("Assault Called for undefined Player.")
+				--Media.DisplayMessage("Assault Called for undefined Player.")
 			end
 			local newTarget = Utils.Random(CoopPlayers)
 			originalAssaultPlayerBaseOrHunt(actor, newTarget, waypoints, fromIdle)
-			Media.DisplayMessage("Assaulted Player changed to:" .. newTarget.Name)
+			--Media.DisplayMessage("Assaulted Player changed to:" .. newTarget.Name)
 		else
 			originalAssaultPlayerBaseOrHunt(actor, targetPlayer, waypoints, fromIdle)
-			Media.DisplayMessage("Assaulted Player is no Coop Player and stays " .. targetPlayer.Name)
+			--Media.DisplayMessage("Assaulted Player is no Coop Player and stays " .. targetPlayer.Name)
 		end
 	end
 end
