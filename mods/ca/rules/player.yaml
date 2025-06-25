@@ -18,10 +18,6 @@ Player:
 	Inherits@HeroesOfTheUnion: ^HeroesOfTheUnionPower
 	Inherits@TankDrop: ^TankDropPower
 	Inherits@KillZone: ^KillZonePower
-	Inherits@AssassinSquad: ^AssassinSquadPower
-	Inherits@HackerCell: ^HackerCellPower
-	Inherits@ConfessorCabal: ^ConfessorCabalPower
-	Inherits@VoidSpike: ^VoidSpikePower
 	TechTree:
 	ClassicProductionQueue@Building:
 		Type: BuildingSQ
@@ -145,6 +141,9 @@ Player:
 	GrantConditionOnPrerequisite@DoctrinesAvailable:
 		Prerequisites: playerxp.level1
 		Condition: upgrades-available
+	GrantConditionOnPrerequisite@CovenantsAvailable:
+		Prerequisites: nod.covenants.available
+		Condition: upgrades-available
 	GrantConditionOnPrerequisite@AllegiancesAvailable:
 		Prerequisites: scrin.allegiances.available
 		Condition: upgrades-available
@@ -154,6 +153,7 @@ Player:
 		NewOptionsTextNotification: New construction options.
 		CannotPlaceTextNotification: Cannot deploy here.
 	SupportPowerManager:
+	SupportPowerInstanceManager:
 	ScriptTriggers:
 	MissionObjectives:
 		WinNotification: Win
@@ -375,11 +375,12 @@ Player:
 	CapturedFactionsManager:
 	UpgradesManager:
 	ProductionTracker:
+	PopController:
 	PlayerBountyPool:
 	PlayerExperience:
 	PlayerExperienceLevels:
 		Factions: soviet, russia, ukraine, iraq, yuri
-		LevelXpRequirements: 75, 250, 450
+		LevelXpRequirements: 75, 250, 425
 		LevelPrerequisites: playerxp.level1, playerxp.level2, playerxp.level3
 		LevelUpTextNotification: You have gained a rank! You are now rank {0}.
 		LevelUpNotification: Promoted
@@ -389,14 +390,13 @@ Player:
 	ProvidesPrerequisitesOnTimeline:
 		Type: AlliedInfluence
 		Factions: allies, england, france, germany, usa
-		MaxTicks: 24000
 		Prerequisites:
-			25: influence.level1
-			62: influence.level2
-			100: influence.level3
+			4500: influence.level1
+			13500: influence.level2
+			22500: influence.level3
 		PrerequisiteGrantedNotifications:
-			25: InfluenceLevel1
-			62: InfluenceLevel2
+			4500: InfluenceLevel1
+			13500: InfluenceLevel2
 		DummyActor: QueueUpdaterDummy
 		PrerequisiteGrantedSound: PlayerRankUp
 	ProvidesPrerequisiteOnKillCount@NodCovenants:

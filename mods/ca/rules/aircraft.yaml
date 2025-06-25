@@ -215,7 +215,7 @@ B2B:
 
 MIG:
 	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Buildable:
 		Queue: AircraftSQ, AircraftMQ
 		BuildAtProductionType: Plane
@@ -483,7 +483,7 @@ SUK.UPG:
 
 YAK:
 	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Buildable:
 		Queue: AircraftSQ, AircraftMQ
 		BuildAtProductionType: Plane
@@ -1051,7 +1051,7 @@ NHAW.paradrop:
 
 HELI:
 	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Buildable:
 		Queue: AircraftSQ, AircraftMQ
 		BuildAtProductionType: Helicopter
@@ -1559,7 +1559,7 @@ A10:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi
-		AmmoPools: primary, primarybld, upgrade
+		AmmoPools: primary, upgrade
 	-RangeMultiplier@SEEK:
 	-RangeMultiplier@SEEK2:
 	-RangeMultiplier@SEEK3:
@@ -1586,10 +1586,10 @@ A10:
 		Condition: ceramic-upgrade
 		Prerequisites: ceramic.upgrade
 	TransformOnCondition@Sidewinders:
-		IntoActor: A10.SW
+		IntoActor: a10.sw
 		RequiresCondition: sidewinders-upgrade && upgrade-complete
 	TransformOnCondition@Avenger:
-		IntoActor: A10.GAU
+		IntoActor: a10.gau
 		RequiresCondition: avenger-upgrade && upgrade-complete
 	AmmoPool@Upgrade:
 		Name: upgrade
@@ -1616,7 +1616,7 @@ A10:
 
 A10.SW:
 	Inherits: A10
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	-GrantConditionOnPrerequisite@Sidewinders:
 	-GrantConditionOnPrerequisite@Avenger:
 	-TransformOnCondition@Sidewinders:
@@ -2022,7 +2022,7 @@ ANTO:
 
 APCH:
 	Inherits: ^HelicopterTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Valued:
 		Cost: 1400
 	Tooltip:
@@ -2135,7 +2135,7 @@ APCH:
 
 ORCA:
 	Inherits: ^HelicopterTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -2313,7 +2313,12 @@ ORCB:
 	RevealsShroud@GAPGEN:
 		Range: 9c0
 		Type: GroundPosition
-	Armament:
+	Armament@PRIMARYBLD:
+		Weapon: OrcaBombBuilding
+		LocalOffset: 2,-256,-43, 2,256,-43
+		PauseOnCondition: !ammo || blinded
+		Name: primarybld
+	Armament@PRIMARY:
 		Weapon: OrcaBomb
 		LocalOffset: 2,-256,-43, 2,256,-43
 		PauseOnCondition: !ammo || blinded
@@ -2325,6 +2330,7 @@ ORCB:
 		PersistentTargeting: false
 		OpportunityFire: true
 		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, primarybld
 	ReturnsToBaseOnAmmoDepleted:
 	Aircraft:
 		CruiseAltitude: 2560
@@ -3064,7 +3070,7 @@ OCAR.Pod:
 
 HARR:
 	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Buildable:
 		Queue: AircraftSQ, AircraftMQ
 		BuildAtProductionType: Helicopter
@@ -3184,7 +3190,7 @@ HARR:
 
 SCRN:
 	Inherits: ^HelicopterTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	RenderSprites:
 		Image: scrin
 	Buildable:
@@ -3525,7 +3531,7 @@ POD:
 		MaximumPitch: 110
 		VTOL: true
 		Repulsable: False
-		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
 	HiddenUnderFog:
 		Type: CenterPosition
 	ClassicFacingBodyOrientation:
@@ -3563,7 +3569,7 @@ POD3:
 
 VENM:
 	Inherits: ^HelicopterTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -3866,7 +3872,7 @@ PMAK:
 		Queue: AircraftSQ, AircraftMQ
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 71
-		Prerequisites: alhq, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atekoralhq, ~aircraft.allies, ~techlevel.high
 		Description: Heavy VTOL bomber with powerful armor penetrating bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Defenses, Light Armor
@@ -3888,6 +3894,11 @@ PMAK:
 	RevealsShroud@GAPGEN:
 		Range: 10c0
 		Type: GroundPosition
+	Armament@PRIMARYBLD:
+		Weapon: PeacemakerBombsBuilding
+		LocalOffset: 0,0,-85
+		PauseOnCondition: !ammo || blinded
+		Name: primarybld
 	Armament@PRIMARY:
 		Weapon: PeacemakerBombs
 		LocalOffset: 0,0,-85
@@ -3898,6 +3909,7 @@ PMAK:
 		Voice: Attack
 		OpportunityFire: true
 		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, primarybld
 	Aircraft:
 		CruiseAltitude: 2560
 		TurnSpeed: 14
@@ -4261,7 +4273,7 @@ KAMV:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 201
 		Prerequisites: ~aircraft.kamv
-		Description: Durable helicopter gunship armed with\n  long range anti-tank rockets.
+		Description: Durable helicopter gunship armed with long range\n  anti-tank rockets with concussive warheads.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Light Armor
 		Weaknesses: • Weak vs Infantry, Buildings\n• Cannot attack Aircraft\n• Has difficulty hitting moving targets
@@ -4648,7 +4660,7 @@ VERT:
 
 MCOR:
 	Inherits: ^HelicopterTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Inherits@InfiltratorStolenTech: ^InfiltratorStolenTech
 	Valued:
 		Cost: 1800
@@ -4877,11 +4889,10 @@ DISC:
 		CircleWidth: 0
 		Type: Drain
 		ActiveUntilCancelled: true
-		CancelOnNewOrder: true
 
 JACK:
 	Inherits: ^PlaneTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -4963,6 +4974,10 @@ JACK:
 		RequiresCondition: !diving
 	TargetedAttackAbility:
 		TargetCursor: attack
-		ArmamentName: primary
+		ArmamentNames: primary
 		CircleWidth: 0
 		Type: JackKnifeDive
+		TargetFrozenActors: true
+	-AttackMove:
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything

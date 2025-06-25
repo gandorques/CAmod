@@ -27,21 +27,21 @@ Player:
 
 ^Vehicle-NOUPG:
 	GrantConditionOnBotOwner@immobile:
-		Condition: notmobile
+		Condition: dormant
 		Bots: dormant
 	SpeedMultiplier@immobile:
 		Modifier: 0
-		RequiresCondition: notmobile
+		RequiresCondition: dormant
 
 ^Infantry:
 	GrantConditionOnBotOwner@immobile:
-		Condition: notmobile
+		Condition: dormant
 		Bots: dormant
 	Mobile:
-		PauseOnCondition: being-warped || notmobile
+		PauseOnCondition: being-warped || dormant
 	SpeedMultiplier@immobile:
 		Modifier: 0
-		RequiresCondition: notmobile
+		RequiresCondition: dormant
 
 TSLA:
 	AttackTesla:
@@ -84,6 +84,14 @@ PDGY:
 		Image: mast
 	GrantCondition@Elite:
 		Condition: rank-elite
+
+4TNK:
+	ChangesHealth:
+		RequiresCondition: !dormant
+
+HTNK:
+	ChangesHealth:
+		RequiresCondition: !dormant
 
 E7:
 	Buildable:
@@ -191,7 +199,6 @@ ActionWormhole:
 	RenderSprites:
 		Image: strategic.upgrade
 	PopControlled:
-		Limit: 1
 	Tooltip:
 		Name: Invisible Action
 

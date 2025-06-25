@@ -6,7 +6,8 @@ ScrinAttackValues = {
 
 NodBuildingsToSell = { NodConyard, NodHand, NodFactory, NodComms }
 
-ScrinReinforcementSquad = { "s3", "s1", "s1", "s1", "s1", "s1", "s2", "s2", "s3", "intl", "rtpd", GunWalkerSeekerOrLacerator, CorrupterOrDevourer, CorrupterOrDevourer, GunWalkerSeekerOrLacerator, GunWalkerSeekerOrLacerator }
+ScrinReinforcementInitialSquad = { "s3", "s1", "s1", "s1", "s1", "s1", "s2", "s2", "s3", "intl", "rtpd", GunWalkerSeekerOrLacerator, CorrupterOrDevourer, CorrupterOrDevourer, GunWalkerSeekerOrLacerator, GunWalkerSeekerOrLacerator }
+ScrinReinforcementSquad = { "s3", "s1", "s1", "s1", "s1", "s2", "s3", "intl", "rtpd", GunWalkerSeekerOrLacerator, CorrupterOrDevourer }
 
 if Difficulty == "hard" then
 	table.insert(UnitCompositions.Scrin, {
@@ -313,7 +314,9 @@ InitSignalTransmittersObjective = function()
 		end)
 
 		Utils.Do(transmitters, function(t)
-			local transmitterFlare = Actor.Create("flare", true, { Owner = USSR, Location = t.Location })
+			local transmitterLocation = t.Location
+			local transmitterFlare = Actor.Create("flare", true, { Owner = USSR, Location = transmitterLocation })
+
 			Beacon.New(USSR, t.CenterPosition)
 			Trigger.AfterDelay(DateTime.Seconds(20), function()
 				transmitterFlare.Destroy()
@@ -341,7 +344,7 @@ InitSignalTransmittersObjective = function()
 						Media.PlaySpeechNotification(USSR, "ReinforcementsArrived")
 						Notification("Reinforcements have arrived.")
 						InitScrinReinforcements(wormhole)
-						FleetRecall(self)
+						FleetRecall(transmitterLocation)
 					end)
 				end)
 			end)
@@ -371,14 +374,22 @@ SpawnWormhole = function(loc)
 	return Actor.Create("wormhole", true, { Owner = Scrin, Location = loc })
 end
 
-InitScrinReinforcements = function(wormhole)
-	DeployScrinReinforcements(wormhole)
+InitScrinReinforcements = function(wormhole, initial)
+	DeployScrinReinforcements(wormhole, true)
 end
 
-DeployScrinReinforcements = function(wormhole)
+DeployScrinReinforcements = function(wormhole, initial)
 	if not wormhole.IsDead then
 		local unitsList = {}
-		Utils.Do(ScrinReinforcementSquad, function(u)
+
+		local compositionUnits
+		if initial then
+			compositionUnits = ScrinReinforcementInitialSquad
+		else
+			compositionUnits = ScrinReinforcementSquad
+		end
+
+		Utils.Do(compositionUnits, function(u)
 			if type(u) == "table" then
 				table.insert(unitsList, Utils.Random(u))
 			else
@@ -395,20 +406,20 @@ DeployScrinReinforcements = function(wormhole)
 		end)
 
 		Trigger.AfterDelay(DateTime.Minutes(3), function()
-			DeployScrinReinforcements(wormhole)
+			DeployScrinReinforcements(wormhole, false)
 		end)
 	end
 end
 
-FleetRecall = function(transmitter)
-	local effect = Actor.Create("recall.effect", true, { Owner = Scrin, Location = transmitter.Location })
+FleetRecall = function(loc)
+	local effect = Actor.Create("recall.effect", true, { Owner = Scrin, Location = loc })
 	Trigger.AfterDelay(DateTime.Seconds(5), effect.Destroy)
 
 	local spawnLocations = {
-		CPos.New(transmitter.Location.X + 2, transmitter.Location.Y + 1),
-		CPos.New(transmitter.Location.X - 2, transmitter.Location.Y - 1),
-		CPos.New(transmitter.Location.X - 1, transmitter.Location.Y + 2),
-		CPos.New(transmitter.Location.X + 1, transmitter.Location.Y - 2)
+		CPos.New(loc.X + 2, loc.Y + 1),
+		CPos.New(loc.X - 2, loc.Y - 1),
+		CPos.New(loc.X - 1, loc.Y + 2),
+		CPos.New(loc.X + 1, loc.Y - 2)
 	}
 
 	Utils.Do(spawnLocations, function(loc)

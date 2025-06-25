@@ -78,7 +78,7 @@ AtomBomb:
 			Light: 75
 			Heavy: 100
 			Concrete: 100
-			Wood: 40
+			Wood: 38
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
@@ -1200,7 +1200,7 @@ MineSpawner:
 		ImpactSounds: mineblo1.aud
 		ValidTargets: Structure
 	Warhead@1Spa: SpawnActor
-		Actors: PROXYMINESPAWN
+		Actors: proxyminespawn
 		Range: 1
 		ForceGround: false
 		ValidTargets: Ground, Air
@@ -1235,7 +1235,7 @@ MineSpawnerWater:
 		ImpactSounds: mineblo1.aud
 		ValidTargets: Structure
 	Warhead@1Spa: SpawnActor
-		Actors: PROXYMINESPAWNWATER
+		Actors: proxyminespawnwater
 		Range: 1
 		ForceGround: false
 		ValidTargets: Water, Air

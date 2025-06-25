@@ -338,6 +338,9 @@ camera.infiltrator:
 	KillsSelf:
 		RemoveInstead: true
 		Delay: 3000
+	UpdatesKillCount:
+		Type: BuildingsOrHarvesters
+		OnCreation: true
 
 camera.paradrop:
 	Inherits: ^CameraBase
@@ -451,7 +454,7 @@ ToxicCloud:
 		CanHover: True
 		Speed: 20
 		CruiseAltitude: 1
-		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Water,Tree,River,Rock,Beach,Bridge,Tunnel,Wall,Ford
 	Wanders:
 		WanderMoveRadius: 5
 		ReduceMoveRadiusDelay: 3
@@ -556,7 +559,7 @@ FLARE.KillZone:
 	Inherits: FLARE
 	-RevealsShroud:
 	KillsSelf:
-		Delay: 750 # matches killzone actor
+		Delay: 1500 # matches killzone actor
 		RemoveInstead: true
 	-MapEditorData:
 
@@ -1366,7 +1369,7 @@ killzone:
 		Image: killzone
 		PlayerPalette: player
 	KillsSelf:
-		Delay: 750 # matches killzone flare
+		Delay: 1500 # matches killzone flare
 		RemoveInstead: true
 	WithRangeCircleCA:
 		Type: KillZone
@@ -1384,7 +1387,7 @@ shadow.beacon.camera:
 		CanHover: true
 		Repulsable: false
 		CruiseAltitude: 1
-		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Water,Tree,River,Rock,Beach,Bridge,Tunnel,Wall,Ford
 	Attachable:
 		Type: ShadowBeacon
 		TargetTypes: ShadowBeaconAttachable
@@ -1434,21 +1437,19 @@ optimized.production1:
 	Inherits@DUMMY: ^InvisibleDummy
 	ProvidesPrerequisite:
 	PopControlled:
-		Limit: 1
 
 optimized.production2:
 	Inherits@DUMMY: ^InvisibleDummy
 	ProvidesPrerequisite:
 	PopControlled:
-		Limit: 1
 
 nod.covenants.available:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
-		Name: 3 enemy buildings or harvesters destroyed
+		Name: 3x enemy buildings destroyed/infiltrated or harvesters destroyed
 	Buildable:
-		Description: 3 enemy buildings or harvesters destroyed
+		Description: 3x enemy buildings destroyed/infiltrated or harvesters destroyed
 
 scrin.allegiances.available:
 	AlwaysVisible:
@@ -1464,3 +1465,52 @@ QueueUpdaterDummy:
 	ProvidesPrerequisite:
 	KillsSelf:
 		RemoveInstead: true
+
+# Dummy actors for rank ups, for observer stats
+playerxp.level1:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Rank 1
+	Buildable:
+		Description: Player XP rank 1.
+	RenderSprites:
+
+playerxp.level2:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Rank 1
+	Buildable:
+		Description: Player XP rank 1.
+	RenderSprites:
+
+playerxp.level3:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Rank 1
+	Buildable:
+		Description: Player XP rank 1.
+	RenderSprites:
+
+influence.level1:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Influence Level 1
+	Buildable:
+		Description: Allied influence level 1.
+	RenderSprites:
+
+influence.level2:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Influence Level 2
+	Buildable:
+		Description: Allied influence level 2.
+	RenderSprites:
+
+influence.level3:
+	Inherits@DUMMY: ^InvisibleDummy
+	Tooltip:
+		Name: Influence Level 3
+	Buildable:
+		Description: Allied influence level 3.
+	RenderSprites:

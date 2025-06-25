@@ -92,6 +92,10 @@ DOG:
 		ArmamentNames: primary
 		CircleWidth: 0
 		Type: DogAttack
+	KeepsDistance:
+	GuardsSelection:
+		ValidOrders: AttackMove, AssaultMove, ForceAttack, KeepDistance
+		ValidTargets: Infantry, Vehicle
 
 TDOG:
 	Inherits: DOG
@@ -125,6 +129,8 @@ TDOG:
 	ProductionCostMultiplier@UkraineBonus:
 		Multiplier: 80
 		Prerequisites: player.ukraine
+	-GuardsSelection:
+	-KeepsDistance:
 
 E1:
 	Inherits: ^Soldier
@@ -184,6 +190,7 @@ E2:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@Inspirable: ^Inspirable
+	Inherits@HeroOfTheUnionTargetableGrenFlamer: ^HeroOfTheUnionTargetableGrenFlamer
 	Buildable:
 		Queue: InfantrySQ, InfantryMQ
 		BuildAtProductionType: Soldier
@@ -347,6 +354,9 @@ U3:
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMovePrioritizeAir
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
+	Buildable:
+		Queue: GuardianGI
+		Description: Allied specialist paradropped infantry.
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -444,7 +454,6 @@ U3:
 		UndeploySounds: igidepa.aud, igidepb.aud
 		PauseOnCondition: being-warped
 		SmartDeploy: True
-		RequiresCondition: !parachute
 		Facing: 332
 	GrantCondition:
 		Condition: editorhack
@@ -515,7 +524,7 @@ U3:
 	Voiced:
 		VoiceSet: GGIVoice
 	Crushable:
-		RequiresCondition: undeployed
+		RequiresCondition: !invulnerability && !being-warped && undeployed
 	AutoDeployer@AI:
 		RequiresCondition: botowner && !deployed && !parachute
 		DeployChance: 100
@@ -580,6 +589,7 @@ E4:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@Inspirable: ^Inspirable
+	Inherits@HeroOfTheUnionTargetableGrenFlamer: ^HeroOfTheUnionTargetableGrenFlamer
 	Buildable:
 		Queue: InfantrySQ, InfantryMQ
 		BuildAtProductionType: Soldier
@@ -1138,6 +1148,7 @@ HACK:
 	Inherits@SELECTION: ^SelectableSupportUnit
 	Buildable:
 		Queue: HackerCell
+		Description: Specialist able to take control of enemy structures & drones from range.
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1145,7 +1156,7 @@ HACK:
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Defenses, Drones
 		Weaknesses: • Cannot attack Infantry, Aircraft, Vehicles (other than Drones)
-		Attributes: • Can take control of enemy structures & drones from range\n• Control lost if the Hacker dies\n• Generates income when inside Internet Center\n• Hack production buildings to steal technology\n    • Allies: Cryo Mortar, Reckoner, Phantom\n    • Soviets: Cyberdog, Cyclops, Kamov\n    • GDI: Sonic Mortar, Basilisk, Shade\n    • Nod: Chem Mortar, Mantis, Vertigo\n    • Scrin: Cyberscrin, Viper, Manticore
+		Attributes: • Control lost if the Hacker dies\n• Generates income when inside Internet Center\n• Hack production buildings to steal technology\n    • Allies: Cryo Mortar, Reckoner, Phantom\n    • Soviets: Cyberdog, Cyclops, Kamov\n    • GDI: Sonic Mortar, Basilisk, Shade\n    • Nod: Chem Mortar, Mantis, Vertigo\n    • Scrin: Cyberscrin, Viper, Manticore
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -1353,7 +1364,7 @@ THF:
 		Voice: Steal
 	Captures:
 		CaptureTypes: vehicle
-		PlayerExperience: 5
+		PlayerExperience: 15
 		Voice: Hijack
 	Voiced:
 		VoiceSet: ThiefVoice
@@ -1382,7 +1393,7 @@ THF:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 		Condition: moving
 	Crushable:
-		RequiresCondition: !moving
+		RequiresCondition: !invulnerability && !being-warped && !moving
 	Targetable@ChaosImmune:
 		TargetTypes: ChaosImmune
 	-SpeedMultiplier@HAZMATSOVIET:
@@ -1577,6 +1588,7 @@ N2:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@Inspirable: ^Inspirable
+	Inherits@HeroOfTheUnionTargetableGrenFlamer: ^HeroOfTheUnionTargetableGrenFlamer
 	Buildable:
 		Queue: InfantrySQ, InfantryMQ
 		BuildAtProductionType: Soldier
@@ -1633,6 +1645,8 @@ N2:
 	GrantConditionOnPrerequisite@EMPUPG:
 		Condition: empgren-upgrade
 		Prerequisites: empgren.upgrade
+	RangeMultiplier@HeroOfTheUnion:
+		RequiresCondition: herooftheunion && !empgren-upgrade
 
 N2R1:
 	Inherits: N2
@@ -1750,6 +1764,7 @@ N4:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@Inspirable: ^Inspirable
+	Inherits@HeroOfTheUnionTargetableGrenFlamer: ^HeroOfTheUnionTargetableGrenFlamer
 	Buildable:
 		Queue: InfantrySQ, InfantryMQ
 		BuildAtProductionType: Soldier
@@ -1804,6 +1819,10 @@ N4:
 		SpawnActors: N5
 	ReplacedInQueue:
 		Actors: n5
+	-RangeMultiplier@HeroOfTheUnion:
+	FirepowerMultiplier@HeroOfTheUnion:
+		RequiresCondition: herooftheunion
+		Modifier: 120
 
 N5:
 	Inherits: ^Cyborg
@@ -1898,7 +1917,7 @@ N5:
 		ShowSelectionBar: true
 		ShowSelectionBarWhenFull: false
 		StartsFullyCharged: true
-		PauseOnCondition: being-warped || parachute
+		PauseOnCondition: being-warped
 		DischargingColor: 00ff00
 		ChargingColor: 008800
 		Instant: true
@@ -2386,10 +2405,12 @@ ASSA:
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: AssassinSquad
+		Description: Specialist armed with a sniper rifle and C4 explosives.
+		IconPalette: chrometd
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Buildings, Defenses
 		Weaknesses: • Weak vs Heavy Armor, Light Armor\n• Cannot attack aircraft
-		Attributes: • Plants C4 to destroy structures
+		Attributes: • Plants C4 to destroy structures\n• Resistant to mind control
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2477,6 +2498,8 @@ ASSA:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: barracks.upgraded
+	Targetable@MindControlResistant:
+		TargetTypes: MindControlResistant
 
 CONF:
 	Inherits: ^Soldier
@@ -2484,9 +2507,11 @@ CONF:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor
 		Weaknesses: • Weak vs Heavy Armor, Buildings, Defenses\n• Cannot attack Aircraft
-		Attributes: • Special Ability: Idol of Kane (max 1 per Confessor)
+		Attributes: • Special Ability: Idol of Kane (max 1 per Confessor)\n• Immune to mind control
 	Buildable:
 		Queue: ConfessorCabal
+		Description: Fanatical elite infantry that can deploy Idols of Kane\n  to inspire allies and demoralize enemies.
+		IconPalette: chrometd
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2522,7 +2547,7 @@ CONF:
 	Guard:
 		Voice: Move
 	SpawnActorAbility:
-		Actor: iok
+		Actors: iok
 		Range: 1c896
 		SkipMakeAnimations: false
 		CircleColor: ff000077
@@ -2531,6 +2556,7 @@ CONF:
 		TargetModifiedCursor: ability2
 		ConcurrentLimit: 1
 		KillExcessDamageTypes: SmallExplosionDeath
+		AvoidActors: true
 	AmmoPool@IdolOfKane:
 		Name: idol
 		Armaments: none
@@ -2546,6 +2572,10 @@ CONF:
 		RequiresSelection: true
 		Position: BottomLeft
 		Margin: 4, 3
+	Targetable@MindControlImmune:
+		TargetTypes: MindControlImmune
+	Targetable@ChaosImmune:
+		TargetTypes: ChaosImmune
 
 ACOL:
 	Inherits: ^Cyborg
@@ -2753,7 +2783,7 @@ JJET:
 		IdealSeparation: 0c384
 		InitialFacing: 92
 		Speed: 118
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
 		AirborneCondition: airborne
 		CruisingCondition: cruising
 		CanHover: true
@@ -3023,6 +3053,7 @@ DESO:
 		Voice: Attack
 		PauseOnCondition: being-warped || reapersnare
 		SmartDeploy: True
+	UndeployOnStop:
 	Crushable:
 		CrushClasses: heavyinfantry
 	TakeCover:
@@ -3037,6 +3068,13 @@ DESO:
 		Weapon: DesolatorBeam
 	PeriodicExplosion:
 		Weapon: RadEruptionWeapon
+		RequiresCondition: deployed && deployed-initial
+	PeriodicExplosion@Stage2:
+		Weapon: RadEruptionWeaponStage2
+		RequiresCondition: deployed && !deployed-initial
+	GrantTimedCondition@InitialDeploy:
+		Condition: deployed-initial
+		Duration: 141
 		RequiresCondition: deployed
 	WithSpriteBody@DEPLOYED:
 		Sequence: deployed
@@ -3498,12 +3536,14 @@ SHAD:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: ShadowTeam
+		Description: Stealth infantry armed with a machine pistol and grenades.
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Shadow Operative
 	TooltipExtras:
-		Description: Cloaked infantry deployed via glider.
 		Strengths: • Strong vs Buildings, Defenses, Infantry, Light Armor
 		Weaknesses: • Weak vs Heavy Armor\n• Cannot attack Aircraft\n• Has difficulty hitting moving vehicles
 		Attributes: • Cloaked when not in combat\n• Shadow beacons provide vision and attach to enemy vehicles that pass over them\n• Can detect cloaked ground units and spies\n• Special Ability: Shadow Beacon
@@ -4205,11 +4245,11 @@ ENLI:
 		BuildPaletteOrder: 230
 		IconPalette: chrometd
 		Prerequisites: ~infantry.nod, tmpp, advcyber.upgrade, ~zeal.covenant, ~techlevel.high
-		Description: Heavy cyborg infantry unit armed with a particle cannon.\n  Damage scales with the max health of the target.
+		Description: Heavy cyborg infantry unit armed with a particle cannon.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Light Armor
 		Weaknesses: • Weak vs Infantry\n• Cannot attack Aircraft
-		Attributes: • Heals on Tiberium\n• Special Ability: EMP Blast
+		Attributes: • Heals on Tiberium\n• Damage scales with the max health of the target\n• Special Ability: EMP Blast
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -4551,6 +4591,7 @@ CMSR:
 		Condition: cmsr-inspiration
 		ValidRelationships: Ally
 		AffectsParent: true
+		RequiresCondition: !passenger
 	WithDecoration@CMSRPIP:
 		Image: pips
 		Sequence: pip-cmsr
@@ -4753,7 +4794,7 @@ ZDEF:
 		Range: 2c0
 		Condition: zdef-shield
 		ValidRelationships: Ally
-		RequiresCondition: shield-active
+		RequiresCondition: shield-active && !passenger
 		AffectsParent: true
 
 ENFO:
@@ -4765,7 +4806,7 @@ ENFO:
 		Queue: InfantrySQ, InfantryMQ
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 130
-		Prerequisites: ~tent, alhq, ~techlevel.high
+		Prerequisites: ~tent, atekoralhq, ~techlevel.high
 		Description: Elite short-range front-line infantry.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor
@@ -4838,7 +4879,7 @@ HOPL:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor
 		Weaknesses: • Weak vs Heavy Armor, Defenses\n• Cannot attack Aircraft
-		Attributes: • 25% of shots blind the target
+		Attributes: • One in every four shots blinds the target
 	Valued:
 		Cost: 650
 	Tooltip:
@@ -4871,7 +4912,7 @@ HOPL:
 		LocalOffset: 350,0,341
 	Armament@BATF:
 		Name: batf
-		Weapon: HopliteGun
+		Weapon: HopliteGunBATF
 	AttackFrontalCharged:
 		Voice: Attack
 		FacingTolerance: 32

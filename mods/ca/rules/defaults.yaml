@@ -367,7 +367,7 @@
 		Modifier: 140
 	ReloadDelayMultiplier@EliteDevelopmentPolicy3:
 		RequiresCondition: rank-elite && development-policy3
-		Modifier: 70
+		Modifier: 75
 
 ^Berserk:
 	SpeedMultiplier@BERSERK:
@@ -432,31 +432,36 @@
 ^Inspirable:
 	ExternalCondition@InspirationCmsr:
 		Condition: cmsr-inspiration
-	ExternalCondition@InspirationVeh:
-		Condition: veh-inspiration
+	ExternalCondition@InspirationTrpc:
+		Condition: trpc-inspiration
+	ExternalCondition@InspirationOvld:
+		Condition: ovld-inspiration
 	GrantCondition@Inspiration1:
-		RequiresCondition: cmsr-inspiration || veh-inspiration
+		RequiresCondition: cmsr-inspiration
 		Condition: inspiration
 	GrantCondition@Inspiration2:
-		RequiresCondition: cmsr-inspiration && veh-inspiration
+		RequiresCondition: trpc-inspiration
+		Condition: inspiration
+	GrantCondition@Inspiration3:
+		RequiresCondition: ovld-inspiration
 		Condition: inspiration
 	ReloadDelayMultiplier@Inspiration1:
-		RequiresCondition: inspiration
+		RequiresCondition: inspiration == 1
 		Modifier: 92
 	ReloadAmmoDelayMultiplier@Inspiration1:
-		RequiresCondition: inspiration
+		RequiresCondition: inspiration == 1
 		Modifier: 92
 	SpeedMultiplier@Inspiration1:
 		RequiresCondition: inspiration == 1
 		Modifier: 130
 	ReloadDelayMultiplier@Inspiration2:
-		RequiresCondition: inspiration == 2
+		RequiresCondition: inspiration >= 2
 		Modifier: 84
 	ReloadAmmoDelayMultiplier@Inspiration2:
-		RequiresCondition: inspiration == 2
+		RequiresCondition: inspiration >= 2
 		Modifier: 84
 	SpeedMultiplier@Inspiration2:
-		RequiresCondition: inspiration == 2
+		RequiresCondition: inspiration >= 2
 		Modifier: 140
 	WithIdleOverlay@Inspiration1:
 		Image: ussrstar
@@ -468,7 +473,7 @@
 		Image: ussrstar
 		Sequence: idle-overlay2
 		Palette: effect
-		RequiresCondition: inspiration == 2
+		RequiresCondition: inspiration >= 2
 		IsDecoration: True
 
 ^HeroOfTheUnionTargetable:
@@ -510,6 +515,15 @@
 		RequiresCondition: herooftheunion
 		Condition: rank-elite
 
+^HeroOfTheUnionTargetableGrenFlamer:
+	Inherits: ^HeroOfTheUnionTargetable
+	DamageMultiplier@HeroOfTheUnion:
+		Modifier: 60
+	ReloadDelayMultiplier@HeroOfTheUnion:
+		Modifier: 90
+	RangeMultiplier@HeroOfTheUnion:
+		Modifier: 170
+
 ^IdolOfKane:
 	ExternalCondition@IdolOfKaneBuff:
 		Condition: iokbuff
@@ -518,7 +532,7 @@
 		Modifier: 130
 	ReloadDelayMultiplier@IdolOfKaneBuff:
 		RequiresCondition: iokbuff
-		Modifier: 80
+		Modifier: 85
 	ExternalCondition@IdolOfKaneDebuff:
 		Condition: iokdebuff
 	SpeedMultiplier@IdolOfKaneDebuff:
@@ -1153,11 +1167,6 @@
 		DamageTypes: AirToGround
 		Modifier: 50
 
-^BuildingAirToGroundProtection:
-	DamageTypeDamageMultiplier@A2GPROTECTION:
-		DamageTypes: AirToGround
-		Modifier: 85
-
 ^GyroStabilizers:
 	WithPalettedOverlay@GYRO:
 		RequiresCondition: gyrostabilizers
@@ -1186,9 +1195,9 @@
 	GrantConditionOnPrerequisite@GYRO:
 		Condition: gyro-upgrade
 		Prerequisites: gyro.upgrade
-	GrantTimedCondition@GYRO:
-		Duration: 2
-		Condition: highlight
+	WithFlashEffect@GYRO:
+		Color: ffffff
+		Interval: 5000
 		RequiresCondition: gyrostabilizers
 
 ^Irradiatable:
@@ -1358,7 +1367,7 @@
 		ValidRelationships: Ally, Neutral
 
 ^AffectedByDriverKill:
-	GrantConditionIfOwnerIsNeutral:
+	GrantConditionIfOwnerIsNeutral@DRIVER_DEAD:
 		Condition: driver-dead
 	Capturable@DRIVER_DEAD:
 		Types: driverless_vehicle
@@ -1392,27 +1401,6 @@
 	Captures@DRIVER_KILL:
 		CaptureTypes: driverless_vehicle
 	CaptureManager:
-
-^GreenFlash:
-	ExternalCondition@GHIGH:
-		Condition: greenhighlight
-	WithColoredOverlay@GHIGH:
-		Color: 80ff8080
-		RequiresCondition: greenhighlight
-
-^RedFlash:
-	ExternalCondition@RHIGH:
-		Condition: redhighlight
-	WithColoredOverlay@RHIGH:
-		Color: ff404080
-		RequiresCondition: redhighlight
-
-^WhiteFlash:
-	ExternalCondition@HIGH:
-		Condition: highlight
-	WithColoredOverlay@HIGH:
-		Color: ffffff80
-		RequiresCondition: highlight
 
 ^Cloakable:
 	ExternalCondition@INVIS:
@@ -1738,11 +1726,6 @@
 		RequiresCondition: c4 || c4seal
 		RequiresSelection: False
 		ValidRelationships: Ally, Neutral, Enemy
-	ExternalCondition@detachable:
-		Condition: detach
-	WithColoredOverlay@detach:
-		RequiresCondition: detach
-		Color: ffffff40
 	AmbientSound@c4:
 		SoundFiles: icoltima.aud, icoltimb.aud, icoltimc.aud
 		Delay: 5
@@ -1784,11 +1767,6 @@
 		RequiresCondition: tnt
 		RequiresSelection: False
 		ValidRelationships: Ally, Neutral, Enemy
-	ExternalCondition@detachable:
-		Condition: detach
-	WithColoredOverlay@detach:
-		RequiresCondition: detach
-		Color: ffffff40
 	AmbientSound@tnt:
 		SoundFiles: icraloop.aud
 		Delay: 6
@@ -1832,11 +1810,6 @@
 		RequiresCondition: mindcontrolled
 		Offset: 0,0,300
 		IsDecoration: True
-	ExternalCondition@PHIGH:
-		Condition: pinkhighlight
-	WithColoredOverlay@PHIGH:
-		Color: ff00ff80
-		RequiresCondition: pinkhighlight
 	RejectsOrders@MindControlled:
 		Reject: Unload
 		RequiresCondition: mindcontrolled
@@ -1899,11 +1872,12 @@
 ^TechLockable:
 	InfiltrateForTimedCondition@TechLock:
 		Condition: tech-locked
-		Duration: 1000
+		Duration: 750
 		Types: TechLockInfiltrate
 		InfiltrationNotification: TechnologyLocked
 		InfiltratedNotification: OurTechnologyLocked
 		ShowSelectionBar: true
+		PlayerExperience: 15
 	WithDecoration@TechLock:
 		Image: hacked
 		Sequence: techlocked
@@ -1999,6 +1973,10 @@
 		Position: Top
 		ValidRelationships: Ally, Enemy, Neutral
 		Margin: 0, 8
+		RequiresCondition: painted-target
+	WithFlashEffect@PaintedTarget:
+		Color: ff0000
+		Interval: 25
 		RequiresCondition: painted-target
 
 ^HoverTrail:
@@ -2116,6 +2094,17 @@
 		Multiplier: 70
 		Prerequisites: economy.policy, influence.level3
 
+^EconomyPolicyTimeReduction:
+	ProductionTimeMultiplier@EconomyPolicy1:
+		Multiplier: 90
+		Prerequisites: economy.policy, influence.level1, !influence.level2
+	ProductionTimeMultiplier@EconomyPolicy2:
+		Multiplier: 80
+		Prerequisites: economy.policy, influence.level2, !influence.level3
+	ProductionTimeMultiplier@EconomyPolicy3:
+		Multiplier: 70
+		Prerequisites: economy.policy, influence.level3
+
 ^DefensePolicyDamageReduction:
 	GrantConditionOnPrerequisite@DefensePolicy1:
 		Condition: defense-policy1
@@ -2161,13 +2150,13 @@
 		Condition: development-policy3
 		Prerequisites: development.policy, influence.level3
 	GainsExperienceMultiplier@DevelopmentPolicy1:
-		Modifier: 133
+		Modifier: 120
 		RequiresCondition: development-policy1
 	GainsExperienceMultiplier@DevelopmentPolicy2:
-		Modifier: 166
+		Modifier: 140
 		RequiresCondition: development-policy2
 	GainsExperienceMultiplier@DevelopmentPolicy3:
-		Modifier: 200
+		Modifier: 160
 		RequiresCondition: development-policy3
 
 ^DevelopmentPolicyDiscount:
@@ -2222,9 +2211,6 @@
 	Inherits@21: ^AuraRepairable
 	Inherits@C4Plantable: ^C4Plantable
 	Inherits@TNTPlantable: ^TNTPlantable
-	Inherits@gflash: ^GreenFlash
-	Inherits@rflash: ^RedFlash
-	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
 	Inherits@SovietT4Boost: ^SovietT4Boost
 	Inherits@oilcost: ^OilRefCostReduction
@@ -2325,14 +2311,17 @@
 		Duration: 100
 		Radius: 2c512
 	Carryable:
-		CarriedCondition: notmobile
+		CarriedCondition: passenger
 		LockedCondition: notmobile
 		LocalOffset: 0,0,200
+	GrantCondition@CarriedImmobile:
+		Condition: notmobile
+		RequiresCondition: passenger
 	CancelActivityOnPickup:
 	Crushable:
 		CrushClasses: tank
 		WarnProbability: 0
-		RequiresCondition: !invulnerability
+		RequiresCondition: !invulnerability && !being-warped
 	DamagedByTintedCells@RADSTRONG:
 		Damage: 100
 		DamageInterval: 16
@@ -2350,7 +2339,7 @@
 		Sequence: Vehicle
 	TeleportNetworkTransportable:
 	Targetable@MINDCONTROL:
-		RequiresCondition: !mindcontrolled && !invulnerability
+		RequiresCondition: !mindcontrolled && !invulnerability && !driver-dead
 	GrantConditionOnHealingReceived@REPAIRCOOLDOWN:
 		Condition: repair-cooldown
 		RequiredHealing: 85000
@@ -2445,7 +2434,6 @@
 	Inherits@Blindable: ^Blindable
 	Inherits@KillZoneTargetable: ^KillZoneTargetable
 	Inherits@ReaperSnareable: ^ReaperSnareable
-	Inherits@rflash: ^RedFlash
 	Inherits@IdolOfKane: ^IdolOfKane
 	Inherits@DevelopmentPolicyVeterancyBonus: ^DevelopmentPolicyVeterancyBonus
 	RenderSprites:
@@ -2535,6 +2523,9 @@
 	AttackMove:
 	Passenger:
 		CargoType: Infantry
+		CargoCondition: passenger
+	UnusedCondition@Passenger:
+		Condition: passenger
 	MassEntersCargo:
 	PassengerBlocked:
 	HiddenUnderFog:
@@ -2543,6 +2534,7 @@
 	Crushable:
 		WarnProbability: 100
 		CrushSound: squishy2.aud
+		RequiresCondition: !invulnerability && !being-warped
 	Guard:
 	Guardable:
 	Tooltip:
@@ -2842,9 +2834,6 @@
 	Inherits@19: ^WeaponJammable
 	Inherits@20: ^AuraRepairable
 	Inherits@slowable: ^Slowable
-	Inherits@gflash: ^GreenFlash
-	Inherits@rflash: ^RedFlash
-	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
 	Inherits@SovietT4Boost: ^SovietT4Boost
@@ -3094,9 +3083,6 @@
 	Inherits@11: ^Suppressable
 	Inherits@12: ^Veilable
 	Inherits@CRATE-CLOAK: ^CrateCloak
-	Inherits@gflash: ^GreenFlash
-	Inherits@rflash: ^RedFlash
-	Inherits@wflash: ^WhiteFlash
 	Inherits@SovietT4Boost: ^SovietT4Boost
 	Inherits@oilcost: ^OilRefCostReduction
 	Inherits@C4: ^C4Plantable
@@ -3187,7 +3173,7 @@
 		VTOL: true
 		InitialFacing: 896
 		CanSlide: True
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium,BlackTiberium
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
 		Crushes: crate, mine, infantry, husk
 	Repairable:
 		RepairActors: fix, rep, srep, hpad, hpad.td, afld, afld.gdi, grav
@@ -3241,6 +3227,7 @@
 	Inherits@3: ^SpriteActor
 	Inherits@C4Plantable: ^C4Plantable
 	Inherits@TNTPlantable: ^TNTPlantable
+	Inherits@Chillable: ^Chillable
 	Inherits@shape: ^1x1Shape
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableBuilding
@@ -3298,10 +3285,6 @@
 	Inherits@4: ^EmpDisable
 	Inherits@6: ^WarpableBuilding
 	Inherits@7: ^BotBuilding
-	Inherits@8: ^Chillable
-	Inherits@wflash: ^WhiteFlash
-	Inherits@rflash: ^RedFlash
-	Inherits@gflash: ^GreenFlash
 	Inherits@HACKABLE: ^Hackable
 	Inherits@WatcherParasite: ^WatcherParasiteAttachable
 	Inherits@TargetPaintable: ^TargetPaintable
@@ -3388,7 +3371,7 @@
 		CloakSound: cloak5.aud
 		UncloakSound: appear1.aud
 	UpdatesBuildOrder:
-	UpdatesKillCount:
+	UpdatesKillCount@BuildingsOrHarvesters:
 		Type: BuildingsOrHarvesters
 	InfiltrateToCreateProxyActor@InfiltratorVision:
 		Proxy: camera.infiltrator
@@ -3396,9 +3379,20 @@
 		UseLocation: true
 		UseCenterPosition: true
 		LinkedToParent: true
+	InfiltrateForTimedCondition@InfiltratorVisionIcon:
+		Condition: observer-attached
+		Types: VisionInfiltrate
+		Duration: 3000
 	Targetable@InfiltratorVision:
 		TargetTypes: VisionInfiltrate
 		RequiresCondition: !being-warped
+	GivesPlayerExperienceOnCapture:
+		CaptureTypes: building
+		PlayerExperience: 12
+		AddExperienceFromValue: true
+		ValuePercentage: 1
+		PlayerExperienceRelationships: Enemy, Neutral
+		SubsequentCaptureModifier: 50
 
 ^BuildingTD:
 	Inherits@1: ^Building
@@ -3582,6 +3576,10 @@
 
 ^TechBuilding:
 	Inherits: ^BasicBuilding
+	Inherits@Cloakable: ^Cloakable
+	Inherits@Hackable: ^Hackable
+	Inherits@WatcherParasite: ^WatcherParasiteAttachable
+	Inherits@TargetPaintable: ^TargetPaintable
 	Huntable:
 	Health:
 		HP: 40000
@@ -3592,6 +3590,11 @@
 		GenericVisibility: None
 	MapEditorData:
 		Categories: Tech building
+	GivesPlayerExperienceOnCapture:
+		CaptureTypes: building
+		PlayerExperience: 10
+		PlayerExperienceRelationships: Enemy, Neutral
+		SubsequentCaptureModifier: 50
 
 ^CommandoSkull:
 	WithDecoration@COMMANDOSKULL:
@@ -3645,9 +3648,9 @@
 		SkipMakeAnimation: true
 		DeployCursor: c4
 		RequiresCondition: !detonate-disabled
-	GrantTimedCondition@highlight:
-		Duration: 2
-		Condition: redhighlight
+	WithFlashEffect@Detonate:
+		Color: ff0000
+		Interval: 5000
 		RequiresCondition: detonate
 	PeriodicExplosion:
 		Weapon: FakeBuildingSelfDestruct
@@ -3655,12 +3658,15 @@
 	GrantTimedCondition@DETONATEDELAY:
 		Condition: detonate-disabled
 		Duration: 125
+	-UpdatesKillCount@BuildingsOrHarvesters:
+	-InfiltrateToCreateProxyActor@InfiltratorVision:
+	-Targetable@InfiltratorVision:
 
 ^InfiltratableFake:
 	Targetable@Infiltration:
-		TargetTypes: PowerOutageInfiltrate
+		TargetTypes: PowerOutageInfiltrate, VisionInfiltrate
 	InfiltrateForDecoration:
-		Types: PowerOutageInfiltrate
+		Types: PowerOutageInfiltrate, VisionInfiltrate, StealCreditsInfiltrate, VetInfiltrate, ResetShroudInfiltrate, GrantSupportPowerInfiltrate
 		RequiresSelection: true
 		Image: pips
 		Palette: chrome
@@ -3669,14 +3675,16 @@
 		Margin: 0, 4
 
 ^AmmoBox:
-	Inherits: ^TechBuilding
+	Inherits: ^BasicBuilding
 	-Selectable:
+	Huntable:
 	Health:
 		HP: 1000
 	Explodes:
 		Weapon: UnitExplode
 	Tooltip:
 		Name: Ammo Box
+		GenericVisibility: None
 	Targetable:
 		TargetTypes: Ground, Structure, NoAutoTarget
 	Armor:
@@ -3687,7 +3695,15 @@
 		Bounds: 1024, 1024
 
 ^CivBuilding:
-	Inherits: ^TechBuilding
+	Inherits: ^BasicBuilding
+	Huntable:
+	Health:
+		HP: 40000
+	Armor:
+		Type: Wood
+	Tooltip:
+		Name: Civilian Building
+		GenericVisibility: None
 	RenderSprites:
 		Palette: player
 	MapEditorData:
@@ -3881,7 +3897,7 @@
 	Inherits: ^BasicHusk
 	Inherits@chrono: ^Chronoshiftable
 	Husk:
-		AllowedTerrain: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium, BlackTiberium
+		AllowedTerrain: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
 	WithIdleOverlay@Burns:
 		Image: fire
 		Sequence: 1
@@ -4278,6 +4294,8 @@
 		RequiresCondition: !being-warped
 	InfiltrateForPowerOutage:
 		Types: PowerOutageInfiltrate
+		InfiltrationNotification: BuildingInfiltrated
+		PlayerExperience: 15
 	PowerMultiplier@FORCEDISABLE:
 		RequiresCondition: forcedisabled
 		Modifier: 0
@@ -4359,7 +4377,6 @@
 		RequiresCondition: capturing
 	Captures:
 		CaptureTypes: building
-		PlayerExperience: 25
 		CaptureDelay: 150
 	Armament@bombdefuser:
 		Weapon: DefuseKit

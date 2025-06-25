@@ -156,7 +156,7 @@ NapalmtdBuilding:
 		Delay: 35
 		Versus:
 			None: 0
-			Wood: 42
+			Wood: 36
 			Light: 0
 			Heavy: 0
 			Concrete: 0
@@ -516,10 +516,9 @@ PortaTeslaCharge:
 		Condition: charged
 		ValidRelationships: Ally
 		ValidTargets: TeslaBoost
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 0c511
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c511
+		Color: ffffff
 		ValidTargets: Ground, Vehicle
 
 TTrackZap:
@@ -726,10 +725,9 @@ Repair:
 	-Warhead@2Dam:
 	-Warhead@3Dam:
 	-Warhead@4Dam:
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 0c511
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c511
+		Color: ffffff
 		ValidTargets: Repair
 
 CyborgRepair:
@@ -756,18 +754,14 @@ RepairFlash:
 	-Warhead@2Dam:
 	-Warhead@3Dam:
 	-Warhead@4Dam:
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 2c511
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 1c0
+		Color: ffffff
 		ValidTargets: Repair
 
 ShieldFlash:
 	Inherits: RepairFlash
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 2c511
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
 		ValidTargets: Structure
 
 Demolish:
@@ -798,10 +792,9 @@ PlaceC4:
 		DeathTypes: ExplosionDeath
 		Range: 1
 	Warhead@TargetValidator: SpreadDamage
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 0c256
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c256
+		Color: ffffff
 		ValidTargets: Ground, Structure, Vehicle
 
 PlaceC4Seal:
@@ -811,7 +804,7 @@ PlaceC4Seal:
 		TriggerTime: 20
 		Type: c4seal
 		ScaleTriggerTimeWithValue: true
-	Warhead@highlight: GrantExternalConditionCA
+	Warhead@Flash: FlashTarget
 		ValidTargets: Ground, Structure
 
 PlaceC4Assassin:
@@ -823,8 +816,8 @@ PrepareC4Seal:
 	Inherits: PlaceC4Seal
 	-Report:
 	-Warhead@AttachDelayedWeapon:
-	Warhead@highlight: GrantExternalConditionCA
-		Condition: redhighlight
+	Warhead@Flash: FlashTarget
+		Color: ff0000
 	Warhead@ProgressBar: GrantExternalConditionCA
 		Range: 0c256
 		Condition: c4seal-preparing
@@ -887,10 +880,9 @@ Ivanbomb:
 		AttachSounds: icraatta.aud
 		MissWeapon: DelayedTNT
 	Warhead@TargetValidator: SpreadDamage
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 0c256
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c256
+		Color: ffffff
 		ValidTargets: Ground, Structure, Vehicle
 	-Warhead@1Dam:
 	-Warhead@2Smu:
@@ -905,10 +897,14 @@ TNT:
 		Spread: 341
 		Damage: 2800
 		Falloff: 1000, 448, 192, 50, 18, 7, 0
-		ValidTargets: Ground, Water, Air
 		Versus:
 			Light: 70
 			Heavy: 20
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@AirDam: SpreadDamage
+		Spread: 128
+		Damage: 28000
+		ValidTargets: Air, AirSmall
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: building, building2
@@ -948,12 +944,10 @@ DefuseKit:
 		Width: 48
 		Duration: 4
 		Color: FFFFFF80
-	Warhead@flash: GrantExternalConditionCA
-		Range: 128
-		Duration: 3
-		Condition: detach
+	Warhead@Flash: FlashTarget
+		Spread: 128
+		Color: ffffff
 		ValidTargets: C4Attached, TNTAttached
-		ValidRelationships: Ally
 	Warhead@DetachDelayedWeapon: DetachDelayedWeapon
 		Types: c4, tnt, c4seal
 		Range: 128
@@ -992,10 +986,9 @@ Hack:
 		Actors: camera.hacker
 		Range: 1
 		ImpactActors: false
-	Warhead@green: GrantExternalConditionCA
-		Range: 0c511
-		Duration: 2
-		Condition: greenhighlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c511
+		Color: 00ff00
 		ValidTargets: Structure, Vehicle
 		ValidRelationships: Neutral, Enemy
 	Warhead@BeingCaptured: GrantExternalConditionCA
@@ -1010,7 +1003,7 @@ PrepareHack:
 	-Report:
 	-Projectile:
 	Projectile: InstantHit
-	-Warhead@green:
+	-Warhead@Flash:
 
 MADTankDetonate:
 	InvalidTargets: Infantry
@@ -1343,6 +1336,10 @@ EnlightenedBeam:
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch-NoFlame
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+	Warhead@Flash: FlashTarget
+		Spread: 1c0
+		Color: 00ffff
+		ValidTargets: Vehicle, Ship
 
 EnlightenedEmp:
 	ReloadDelay: 500
@@ -1365,7 +1362,7 @@ EnlightenedEmp:
 		Range: 0c896
 		Duration: 150
 		Condition: empdisable
-		ValidTargets: Vehicle
+		ValidTargets: Vehicle, Ship
 		InvalidTargets: Cyborg, EmpImmune
 	Warhead@2Emp: GrantExternalConditionCA
 		Range: 0c896
@@ -1492,8 +1489,8 @@ PrisLaser:
 			None: 40
 			Wood: 40
 			Concrete: 90
-			Light: 75
-			Heavy: 75
+			Light: 80
+			Heavy: 80
 			Brick: 50
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch-NoFlame
@@ -1618,7 +1615,7 @@ HopliteGun:
 		SecondaryBeamZOffset: 511
 		SecondaryBeamColor: 75D1FF60
 	Warhead@1Dam: SpreadDamage
-		Spread: 128
+		Spread: 180
 		Damage: 6000
 		Versus:
 			None: 150
@@ -1673,6 +1670,12 @@ HopliteIFVGun:
 		Versus:
 			Wood: 80
 			Heavy: 30
+
+HopliteGunBATF:
+	Inherits: HopliteGunCharged
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 288
 
 KirovBomb:
 	ReloadDelay: 25
@@ -2145,7 +2148,7 @@ OrcaBomb:
 		ValidTargets: Ground, Water
 		Versus:
 			None: 25
-			Wood: 50
+			Wood: 0
 			Light: 75
 			Heavy: 100
 			Concrete: 35
@@ -2172,6 +2175,28 @@ OrcaBomb:
 		Condition: empdisable
 		ValidTargets: Defense
 		InvalidTargets: EmpImmune
+
+OrcaBombBuilding:
+	Inherits: OrcaBomb
+	-Report:
+	-Projectile:
+	Projectile: InstantHit
+	TargetActorCenter: false
+	Warhead@1Dam: SpreadDamage
+		Delay: 35
+		Versus:
+			None: 0
+			Wood: 40
+			Light: 0
+			Heavy: 0
+			Concrete: 0
+			Brick: 0
+		DebugOverlayColor: ffaa00
+	-Warhead@2Smu:
+	-Warhead@3Eff:
+	-Warhead@4Eff:
+	-Warhead@emp:
+	-Warhead@empdef:
 
 MicrowaveZap:
 	ValidTargets: Ground, Water
@@ -2226,6 +2251,7 @@ MicrowaveZap.UPG:
 	Inherits: MicrowaveZap
 	Warhead@DriverKill: ChangeOwnerToNeutral
 		ValidTargets: DriverKillLow
+		InvalidTargets: DriverKillImmune
 		ValidRelationships: Enemy, Ally
 		CargoEffect: Kill
 		Range: 0c511
@@ -2237,12 +2263,12 @@ MicrowaveZap.UPG:
 		Condition: empdisable
 		ValidTargets: Vehicle, Ship, Defense
 		InvalidTargets: EmpImmune
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 0c511
-		ValidRelationships: Enemy, Ally
-		Duration: 2
-		Condition: highlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c511
+		Color: ffffff
 		ValidTargets: DriverKillLow
+		InvalidTargets: DriverKillImmune
+		ValidRelationships: Enemy, Ally
 
 HornetLauncher:
 	ReloadDelay: 15
@@ -2370,6 +2396,7 @@ ChaosCloud:
 	Projectile: InstantHit
 	Warhead@1Cond: GrantExternalConditionCA
 		ValidTargets: Ground, Vehicle
+		InvalidTargets: ChaosImmune
 		Range: 1c512
 		Duration: 50
 		Condition: berserk
@@ -2433,7 +2460,7 @@ MempTargeting:
 RadTrooperBeam:
 	Range: 6c0
 	ReloadDelay: 110
-	Report: idesat1a.aud
+	Report: radbeam1.aud
 	Projectile: RadBeam
 		Amplitude: 176
 		WaveLength: 384
@@ -2456,6 +2483,9 @@ RadTrooperBeam:
 
 DesolatorBeam:
 	Inherits: RadTrooperBeam
+	Report: idesat1a.aud
+	Projectile: RadBeam
+		Thickness: 48
 	Warhead@1Dam: SpreadDamage
 		Spread: 180
 		Versus:
@@ -2556,6 +2586,11 @@ RadEruptionWeapon:
 		Explosions: radspike, radspike2
 		ExplosionPalette: tdeffect
 
+RadEruptionWeaponStage2:
+	Inherits: RadEruptionWeapon
+	Warhead@1Radiation: CreateTintedCells
+		Falloff: 100, 80, 60, 40, 20, 0
+
 PsychicBeamBATF:
 	Inherits: DesolatorBeam
 	ReloadDelay: 75
@@ -2630,10 +2665,9 @@ CyCannon:
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
 		ImpactSounds: expnew16.aud, expnew17.aud
-	Warhead@green: GrantExternalConditionCA
-		Range: 0c511
-		Duration: 2
-		Condition: greenhighlight
+	Warhead@Flash: FlashTarget
+		Spread: 0c511
+		Color: 00ff00
 		ValidTargets: Ground, Vehicle
 
 NeutronCannon:
@@ -2851,7 +2885,7 @@ JDAM:
 		ValidTargets: Ground, Water
 		Versus:
 			None: 0
-			Wood: 100
+			Wood: 80
 			Light: 80
 			Heavy: 100
 			Concrete: 80
@@ -2999,10 +3033,9 @@ AttachShadowBeacon:
 		ValidTargets: ShadowBeaconAttachable
 	Warhead@TargetValidator: SpreadDamage
 		ValidTargets: ShadowBeaconAttachable
-	Warhead@highlight: GrantExternalConditionCA
-		Range: 341
-		Duration: 2
-		Condition: redhighlight
+	Warhead@Flash: FlashTarget
+		Spread: 341
+		Color: ff0000
 		ValidTargets: ShadowBeaconAttachable
 
 ^Debris:
@@ -3372,9 +3405,10 @@ ManticoreBolts:
 		Speed: 360
 		Blockable: false
 		Jammable: false
-		RangeLimit: 15c0
+		RangeLimit: 16c0
 		ShadowColor: 00000033
-		HorizontalRateOfTurn: 4
+		HorizontalRateOfTurn: 28
+		VerticalRateOfTurn: 28
 		CruiseAltitude: 0
 	Warhead@1Dam: SpreadDamage
 		Range: 0, 0c64, 0c256, 1c768
@@ -3420,7 +3454,7 @@ PeacemakerBombs:
 		Damage: 24000
 		Versus:
 			None: 10
-			Wood: 40
+			Wood: 0
 			Light: 70
 			Heavy: 100
 			Concrete: 55
@@ -3454,6 +3488,28 @@ PeacemakerBombs:
 		AimChance: 0
 		ValidTargets: Ground, Infantry, Vehicle
 		ThrowWithoutTarget: true
+
+PeacemakerBombsBuilding:
+	Inherits: PeacemakerBombs
+	-Report:
+	-Projectile:
+	Projectile: InstantHit
+	TargetActorCenter: false
+	Warhead@1Dam: SpreadDamage
+		Delay: 35
+		Versus:
+			None: 0
+			Wood: 40
+			Light: 0
+			Heavy: 0
+			Concrete: 0
+			Brick: 0
+		DebugOverlayColor: ffaa00
+	-Warhead@2Dam:
+	-Warhead@2Smu:
+	-Warhead@3Eff:
+	-Warhead@4EffWater:
+	-Warhead@Shrap:
 
 FloatingDiscLaser:
 	Inherits: Laser
@@ -3535,7 +3591,7 @@ ZoneRaiderGrenade:
 	Range: 6c0
 	Report: zrai-fire1.aud, zrai-fire2.aud
 	Projectile: Bullet
-		Speed: 750
+		Speed: 700
 		Image: BOMB
 		Shadow: true
 		Inaccuracy: 554
@@ -3545,7 +3601,7 @@ ZoneRaiderGrenade:
 		ContrailStartColor: 5bd8c3
 		ContrailStartColorAlpha: 128
 	Warhead@1Dam: SpreadDamage
-		Spread: 426
+		Spread: 384
 		Damage: 8500
 		Versus:
 			None: 35
@@ -3694,7 +3750,7 @@ BasiliskPulse:
 	ReloadDelay: 60
 	Burst: 3
 	BurstDelays: 5
-	Range: 5c0
+	Range: 8c0
 	StartBurstReport: basiwave.aud
 	TargetActorCenter: true
 	Projectile: LinearPulse
@@ -3750,6 +3806,7 @@ TargetPainter:
 	ReloadDelay: 25
 	ValidTargets: Vehicle, Ship, Structure
 	Report: targetpainterbeep.aud
+	TargetActorCenter: true
 	Projectile: ArcLaserZap
 		Color: 55555560
 		Angle: 70
@@ -3763,8 +3820,4 @@ TargetPainter:
 		Range: 0c42
 		Duration: 26
 		Condition: painted-target
-		ValidTargets: Vehicle, Ship, Structure
-	Warhead@highlight: FlashTarget
-		Spread: 0c42
-		Color: ff0000
 		ValidTargets: Vehicle, Ship, Structure
