@@ -5378,42 +5378,42 @@ Actors:
 		SubCell: 5
 		Facing: 512
 		Location: 68,23
-	Actor1726: n3c
+	Actor1726: reap
 		Owner: CyborgSlaves
 		SubCell: 1
 		Facing: 512
 		Location: 63,20
-	Actor1727: n3c
+	Actor1727: reap
 		Owner: CyborgSlaves
 		SubCell: 2
 		Facing: 512
 		Location: 63,20
-	Actor1728: n3c
+	Actor1728: reap
 		Owner: CyborgSlaves
 		SubCell: 4
 		Facing: 512
 		Location: 63,20
-	Actor1729: n3c
+	Actor1729: reap
 		Owner: CyborgSlaves
 		SubCell: 5
 		Facing: 512
 		Location: 63,20
-	Actor1733: n3c
+	Actor1733: reap
 		Owner: CyborgSlaves
 		SubCell: 1
 		Facing: 512
 		Location: 69,20
-	Actor1734: n3c
+	Actor1734: reap
 		Owner: CyborgSlaves
 		SubCell: 2
 		Facing: 512
 		Location: 69,20
-	Actor1735: n3c
+	Actor1735: reap
 		Owner: CyborgSlaves
 		SubCell: 4
 		Facing: 512
 		Location: 69,20
-	Actor1736: n3c
+	Actor1736: reap
 		Owner: CyborgSlaves
 		SubCell: 5
 		Facing: 512

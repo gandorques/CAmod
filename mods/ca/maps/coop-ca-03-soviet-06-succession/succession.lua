@@ -15,7 +15,7 @@ AdjustedNodCompositions = AdjustCompositionsForDifficulty(UnitCompositions.Nod)
 
 Squads = {
 	Main1 = {
-		InitTime = 0 - DateTime.Minutes(10),
+		InitTimeAdjustment = -DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(3),
 			normal = DateTime.Minutes(1) + DateTime.Seconds(30),
@@ -39,7 +39,7 @@ Squads = {
 		},
 	},
 	Main2 = {
-		InitTime = 0 - DateTime.Minutes(10),
+		InitTimeAdjustment = -DateTime.Minutes(10),
 		Delay = {
 			easy = DateTime.Minutes(6),
 			normal = DateTime.Minutes(4),
@@ -231,6 +231,7 @@ WorldLoaded = function()
 		Reinforcements.Reinforce(USSR, { "kiro" }, { KirovSpawn2.Location, KirovRally2.Location })
 		end
 	end)
+
 	Trigger.AfterDelay(1, function()
 		for k, v in pairs({ InitSquad1, InitSquad2, InitSquad3, InitSquad4, InitSquad5 }) do
 			local actors = Map.ActorsInCircle(v.CenterPosition, WDist.New(8 * 1024));
