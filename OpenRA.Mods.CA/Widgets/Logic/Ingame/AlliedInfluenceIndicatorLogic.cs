@@ -12,22 +12,23 @@ using System;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Widgets;
+using OpenRA.Primitives;
 using OpenRA.Widgets;
 
 namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	class AlliedInfluenceIndicatorLogic : ChromeLogic
 	{
-		[TranslationReference("level")]
+		[FluentReference("level")]
 		const string PlayerInfluenceLevel = "label-player-influence-level";
 
-		[TranslationReference("time")]
+		[FluentReference("time")]
 		const string PlayerInfluenceLevelTime = "label-player-influence-level-time";
 
-		[TranslationReference("coalition")]
+		[FluentReference("coalition")]
 		const string ChosenCoalition = "label-player-influence-coalition";
 
-		[TranslationReference("policy")]
+		[FluentReference("policy")]
 		const string ChosenPolicy = "label-player-influence-policy";
 
 		const string NoneImage = "none";
@@ -49,7 +50,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			var container = widget.Get<ContainerWidget>("ALLIED_INFLUENCE");
 			var coalitionImage = container.Get<ImageWidget>("ALLIED_COALITION_IMAGE");
+			var noCoalitionImage = container.Get<ImageWidget>("ALLIED_NO_COALITION_IMAGE");
 			influenceMeter = container.Get<AlliedInfluenceMeterWidget>("ALLIED_INFLUENCE_METER");
+			noCoalitionImage.IsVisible = () => false;
 
 			// influence meter is only shown if player is an allied faction
 			if (world.LocalPlayer.Faction.Side != "Allies")
@@ -72,16 +75,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				{
 					var thresholdsPassed = timeline.ThresholdsPassed;
 
-					var tooltip = TranslationProvider.GetString(PlayerInfluenceLevel, Translation.Arguments("level", thresholdsPassed));
+					var tooltip = FluentProvider.GetMessage(PlayerInfluenceLevel, "level", thresholdsPassed);
 
 					if (timeline.TicksUntilNextThreshold > 0)
-						tooltip += "\n" + TranslationProvider.GetString(PlayerInfluenceLevelTime, Translation.Arguments("time", WidgetUtils.FormatTime(timeline.TicksUntilNextThreshold, world.Timestep)));
+						tooltip += "\n" + FluentProvider.GetMessage(PlayerInfluenceLevelTime, "time", WidgetUtils.FormatTime(timeline.TicksUntilNextThreshold, world.Timestep));
 
 					if (chosenCoalition != null)
-						tooltip += "\n" + TranslationProvider.GetString(ChosenCoalition, Translation.Arguments("coalition", char.ToUpper(chosenCoalition[0]) + chosenCoalition[1..]));
+						tooltip += "\n" + FluentProvider.GetMessage(ChosenCoalition, "coalition", char.ToUpper(chosenCoalition[0]) + chosenCoalition[1..]);
 
 					if (chosenPolicy != null)
-						tooltip += "\n" + TranslationProvider.GetString(ChosenPolicy, Translation.Arguments("policy", char.ToUpper(chosenPolicy[0]) + chosenPolicy[1..]));
+						tooltip += "\n" + FluentProvider.GetMessage(ChosenPolicy,"policy", char.ToUpper(chosenPolicy[0]) + chosenPolicy[1..]);
 
 					return tooltip;
 				});
@@ -94,7 +97,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 				timeline.TicksChanged += HandleTicksChanged;
 
-				coalitionImage.GetImageName = () =>  {
+				coalitionImage.GetImageName = () =>
+				{
 					if (timeline.TicksElapsed >= timeline.MaxTicks)
 						return chosenCoalition ?? NoneImage;
 
@@ -103,7 +107,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 				coalitionImage.GetTooltipText = () =>
 				{
-					var timeCoalitionPolicy = $"0-{chosenCoalition}-{chosenPolicy}";
+					var timeCoalitionPolicy = $"{(timeline.TicksUntilNextThreshold / 25).ToString()}-{chosenCoalition}-{chosenPolicy}";
 					return influenceMeterTooltipTextCached.Update(timeCoalitionPolicy);
 				};
 			}
@@ -111,6 +115,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				coalitionImage.GetImageName = () => NoneImage;
 				influenceMeter.IsVisible = () => false;
+				coalitionImage.IsVisible = () => false;
+				noCoalitionImage.IsVisible = () => true;
 			}
 		}
 

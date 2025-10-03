@@ -1,10 +1,10 @@
 ^ExistsInWorld:
 	GivesExperienceCA:
 		ActorExperienceOnDamage: false
+	ScriptTags:
 
 ^Palettes:
-	GlobalLightingPaletteEffect:
-		ExcludePalettes: fog, shroud, cursor, chrome, chrometd, chromes, colorpicker, colorpickertd, colorpickerscrin, fog, shroud, tseffect, ra2effect, ra2unit, tdeffect, effect-ignore-lighting, tdeffect-ignore-lighting-alpha85, d2keffect-ignore-lighting-alpha75, d2keffect-ignore-lighting-alpha50, ra2effect-ignore-lighting-alpha90, ra2effect-ignore-lighting-alpha75, ra2effect-ignore-lighting-alpha50, tseffect-ignore-lighting-alpha75, tsunit-ignore-lighting-alpha75, ra2unit-ignore-lighting-alpha75, ra2unit-ignore-lighting-alpha90, tseffect-ignore-lighting-alpha90
+	TintPostProcessEffect:
 
 Player:
 	-ConquestVictoryConditions:
@@ -74,6 +74,17 @@ World:
 		CheckboxVisible: False
 	-SpawnStartingUnits:
 	-MapStartingLocations:
+	ScriptLobbyDropdown@DIFFICULTY:
+		ID: difficulty
+		Label: dropdown-difficulty.label
+		Description: dropdown-difficulty.description
+		Values:
+			easy: options-difficulty.easy
+			normal: options-difficulty.normal
+			hard: options-difficulty.hard
+			vhard: options-difficulty.vhard
+			brutal: options-difficulty.brutal
+		Default: normal
 	ObjectivesPanel:
 		PanelName: MISSION_OBJECTIVES
 	MapBuildRadius:
@@ -103,6 +114,31 @@ World:
 ^Disabled:
 	Buildable:
 		Prerequisites: ~disabled
+
+# Assigned to actors in missions, assigned in lua dynamically
+# (so we use DummyConditionConsumer to prevent yaml warnings)
+
+^ActorDifficultyConditions:
+	ExternalCondition@EASY:
+		Condition: difficulty-easy
+	ExternalCondition@NORMAL:
+		Condition: difficulty-normal
+	ExternalCondition@HARD:
+		Condition: difficulty-hard
+	ExternalCondition@VHARD:
+		Condition: difficulty-vhard
+	ExternalCondition@BRUTAL:
+		Condition: difficulty-brutal
+	DummyConditionConsumer@EASY:
+		Condition: difficulty-easy
+	DummyConditionConsumer@NORMAL:
+		Condition: difficulty-normal
+	DummyConditionConsumer@HARD:
+		Condition: difficulty-hard
+	DummyConditionConsumer@VHARD:
+		Condition: difficulty-vhard
+	DummyConditionConsumer@BRUTAL:
+		Condition: difficulty-brutal
 
 # Prevent neutralised units decaying
 
@@ -544,6 +580,7 @@ PDGY:
 
 ETPD:
 	Inherits: TPOD
+	Inherits@ActorDifficultyConditions: ^ActorDifficultyConditions
 	Inherits@SHIELDS: ^ScrinShields
 	Inherits@A2GPROTECTION: ^AirToGroundProtection
 	Inherits@SHRAPNEL: ^ThrowsShrapnelBig
@@ -600,22 +637,6 @@ ETPD:
 		InitialStanceAI: AttackAnything
 	SpawnActorOnDeath:
 		Actor: ETPD.Husk
-	ExternalCondition@NORMAL:
-		Condition: difficulty-normal
-	ExternalCondition@EASY:
-		Condition: difficulty-easy
-	FirepowerMultiplier@NORMAL:
-		Modifier: 75
-		RequiresCondition: difficulty-normal
-	FirepowerMultiplier@EASY:
-		Modifier: 50
-		RequiresCondition: difficulty-easy
-	DamageMultiplier@NORMAL:
-		Modifier: 125
-		RequiresCondition: difficulty-normal
-	DamageMultiplier@EASY:
-		Modifier: 150
-		RequiresCondition: difficulty-easy
 	Targetable@ETPD:
 		TargetTypes: ExterminatorTripod
 	Targetable@SHIELDED:
@@ -633,15 +654,12 @@ ETPD:
 		TargetTypes: DriverKillImmune
 	CaptureManager:
 		-BeingCapturedCondition:
-	DamageTypeDamageMultiplier@A2GPROTECTION:
-		Modifier: 75
-		RequiresCondition: !difficulty-easy
 	-ExternalCondition@UNITSELL:
 	-Sellable:
 	ChangesHealth@THEAL:
 		Step: 2000
 		PercentageStep: 0
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: 380mm
 		EmptyWeapon: 380mm
 
@@ -671,14 +689,7 @@ SCRINPURIFIER:
 		Name: Scrin Tiberium Purifier
 	WithIdleOverlay@ACTIVE:
 		Sequence: purification
-		RequiresCondition: !is-neutral
 		Offset: 800,50,-150
-	GrantConditionIfOwnerIsNeutral@NEUTRAL:
-		Condition: is-neutral
-	SeedsResource:
-		ResourceType: BlueTiberium
-		Interval: 2
-		RequiresCondition: !is-neutral
 	Health:
 		HP: 150000
 	-CaptureNotification:

@@ -18,6 +18,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
+	[TraitLocation(SystemActors.Player)]
 	[Desc("Tracks player experience and sets grants prerequisites based on it.")]
 	public class PlayerExperienceLevelsInfo : ConditionalTraitInfo, Requires<PlayerExperienceInfo>, Requires<TechTreeInfo>, ITechTreePrerequisiteInfo
 	{
@@ -126,7 +127,7 @@ namespace OpenRA.Mods.CA.Traits
 					Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, "Speech", Info.LevelUpNotification, self.Owner.Faction.InternalName);
 
 				if (Info.LevelUpTextNotification != null)
-					TextNotificationsManager.AddTransientLine(string.Format(Info.LevelUpTextNotification, currentLevel), self.Owner);
+					TextNotificationsManager.AddTransientLine(self.Owner, string.Format(Info.LevelUpTextNotification, currentLevel));
 
 				notificationQueued = false;
 				ticksUntilNotification = Info.NotificationDelay;

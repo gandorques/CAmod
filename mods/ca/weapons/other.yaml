@@ -1455,7 +1455,7 @@ PointLaser:
 	InvalidTargets: Infantry, Vehicle, Structure, Wall, Ship, Submarine
 	Range: 1c768
 	Report: vpalwe2d.aud
-	AirThreshold: 1c0
+	AirThreshold: 4c0
 	Projectile: LaserZapCA
 		Width: 30
 		Duration: 3
@@ -2543,6 +2543,11 @@ RadBeamWeaponHeavy:
 		Level: 250
 		MaxLevel: 750
 		LayerName: radioactivity.medium
+	Warhead@2irrad: GrantExternalConditionCA
+		Range: 0c256
+		Duration: 250
+		Condition: irradiated
+		ValidTargets: Vehicle, Ship
 	Warhead@3Eff: CreateEffect
 		Explosions: radhit
 		ExplosionPalette: caneon
@@ -3541,7 +3546,7 @@ FloatingDiscLaser:
 
 FloatingDiscPowerDrainer:
 	Inherits: ^FloatingDiscDrainer
-	ValidTargets:	PowerDrainable
+	ValidTargets: PowerDrainable
 	Warhead@PowerDrain: GrantExternalConditionCA
 		Range: 0c128
 		Duration: 11
@@ -3551,7 +3556,7 @@ FloatingDiscPowerDrainer:
 
 FloatingDiscResourceDrainer:
 	Inherits: ^FloatingDiscDrainer
-	ValidTargets:	ResourceDrainable
+	ValidTargets: ResourceDrainable
 	Warhead@ResourceDrain: GrantExternalConditionCA
 		Range: 0c128
 		Duration: 11
@@ -3708,7 +3713,7 @@ ZeusCloud:
 	Warhead@Shadow: FireFragment
 		UseZOffsetAsAbsoluteHeight: true
 		Weapon: ZeusShadow
-		ValidTargets:  Ground, Air, Water
+		ValidTargets: Ground, Air, Water
 		ImpactActors: false
 
 ZeusShadow:
@@ -3802,7 +3807,7 @@ TroopCrawlerDummyWeapon:
 	Projectile: InstantHit
 
 TargetPainter:
-	Range: 15c0
+	Range: 13c0
 	ReloadDelay: 25
 	ValidTargets: Vehicle, Ship, Structure
 	Report: targetpainterbeep.aud
@@ -3813,11 +3818,16 @@ TargetPainter:
 		Width: 70
 		Duration: 20
 		HitAnim: empty
-	Warhead@1Dam: RevealShroud
-		Duration: 26
-		Radius: 6c0
+	Warhead@UnitReveal: RevealShroud
+		Duration: 28
+		Radius: 5c0
+		InvalidTargets: Structure
+	Warhead@BuildingReveal: RevealShroud
+		Duration: 28
+		Radius: 3c0
+		ValidTargets: Structure
 	Warhead@Cond: GrantExternalConditionCA
 		Range: 0c42
-		Duration: 26
+		Duration: 28
 		Condition: painted-target
 		ValidTargets: Vehicle, Ship, Structure

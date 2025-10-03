@@ -8,14 +8,14 @@ V2RL:
 		Queue: VehicleSQ, VehicleMQ
 		BuildPaletteOrder: 180
 		Prerequisites: anyradar, ~vehicles.soviet, ~!v3.upgrade, ~techlevel.medium
-		Description: Long-range rocket artillery with low rate of fire.
+		Description: actor-v2rl.description
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Defenses, Infantry, Light Armor
 		Weaknesses: • Cannot attack Aircraft\n• Has difficulty hitting moving targets
 	Valued:
 		Cost: 900
 	Tooltip:
-		Name: V2 Rocket Launcher
+		Name: actor-v2rl.name
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -47,7 +47,7 @@ V2RL:
 		RequiresCondition: reloading
 		Sequence: empty-idle
 		Name: reloading
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -65,6 +65,8 @@ V2RL:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 KATY:
 	Inherits: ^Vehicle
@@ -116,7 +118,7 @@ KATY:
 		PauseOnCondition: empdisable || being-warped || blinded
 		FacingTolerance: 0
 		Voice: Attack
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -134,6 +136,8 @@ KATY:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 GRAD:
 	Inherits: KATY
@@ -181,6 +185,8 @@ GRAD:
 	GrantConditionOnPrerequisite@RocketPods:
 		Prerequisites: rocketpods.upgrade
 		Condition: rocketpods-upgrade
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Artillery Doctrine.
 
 NUKC:
 	Inherits: ^Tank
@@ -311,7 +317,7 @@ NUKC:
 		RequiresCondition: atomic-ammo && !has-atomic-ammo
 	ReloadAmmoPoolCA@ATOMICAMMODECAY:
 		Count: -1
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: UnitExplodeIraqTank
 		LoadedChance: 100
 	ProducibleWithLevel:
@@ -372,6 +378,20 @@ NUKC:
 	RejectsOrders:
 		Reject: AttackMove
 		RequiresCondition: !undeployed
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		RenderPreviewActor: nukc.preview
+		AdditionalInfo: Requires Artillery Doctrine.
+
+NUKC.Preview:
+	Inherits: ^PreviewDummy
+	RenderSprites:
+		Image: nukc
+	WithFacingSpriteBody:
+	WithSpriteTurret:
+		Sequence: turret
+	Turreted:
 
 1TNK:
 	Inherits: ^Tank
@@ -441,6 +461,8 @@ NUKC:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: vehicles.upgraded
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 2TNK:
 	Inherits: ^Tank
@@ -503,6 +525,8 @@ NUKC:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 1194, 1194
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 GTNK:
 	Inherits: 2TNK
@@ -539,6 +563,8 @@ GTNK:
 		Actor: GTNK.Husk
 	Voiced:
 		VoiceSet: GrizzlyVoice
+	EncyclopediaExtras:
+		Subfaction: usa
 
 GTNKR2:
 	Inherits: GTNK
@@ -547,6 +573,8 @@ GTNKR2:
 	ProducibleWithLevel:
 		-Prerequisites:
 		InitialLevels: 2
+	-Encyclopedia:
+	-EncyclopediaExtras:
 
 GTNK.squad:
 	AlwaysVisible:
@@ -604,7 +632,7 @@ GTNK.squad:
 			traveler: devo
 			harbinger: devo
 	-Buildable:
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	GrantConditionOnFaction@France:
 		Factions: france
@@ -744,8 +772,6 @@ GTNK.squad:
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Move, Damage, Heal
-		Palette: player
-		IsPlayerPalette: false
 		RequiresCondition: england && !cloak-force-disabled && !being-warped && !empdisable && !driver-dead
 		PauseOnCondition: invisibility
 	Cloak@CRATE-CLOAK:
@@ -770,13 +796,14 @@ GTNK.squad:
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 	-MapEditorData:
+	-Encyclopedia:
 
 2TNK.TEMP:
 	Inherits: 2TNK
 	Inherits@TEMPINC: ^TemporalReinforcement
 	RenderSprites:
 		Image: 2tnk
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	-ActorLostNotification:
 	-SpawnActorOnDeath:
@@ -784,6 +811,7 @@ GTNK.squad:
 	-ChronoshiftableCA:
 	-HealthCapDamageMultiplier@CHRONO:
 	-MapEditorData:
+	-Encyclopedia:
 
 3TNK:
 	Inherits: ^Tank
@@ -878,6 +906,8 @@ GTNK.squad:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 3TNK.ATOMIC:
 	Inherits: 3TNK
@@ -904,7 +934,7 @@ GTNK.squad:
 	SpeedMultiplier:
 		Modifier: 125
 	-SpawnActorOnDeath:
-	Explodes@ATOMICENGINES:
+	FireWarheadsOnDeath@ATOMICENGINES:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: !being-warped
@@ -980,6 +1010,8 @@ GTNK.squad:
 	Upgradeable@RHINO:
 		Actor: 3tnk.rhino.yuri
 	-Upgradeable@LASHER:
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 3TNK.ATOMICYURI:
 	Inherits: 3TNK.ATOMIC
@@ -1043,6 +1075,8 @@ GTNK.squad:
 	Upgradeable@RHINO:
 		Actor: 3tnk.rhino.atomicyuri
 	-Upgradeable@LASHER:
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 3TNK.RHINO:
 	Inherits: ^Tank
@@ -1151,6 +1185,10 @@ GTNK.squad:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Armor Doctrine.
 
 3TNK.RHINO.ATOMIC:
 	Inherits: 3TNK.RHINO
@@ -1171,7 +1209,7 @@ GTNK.squad:
 	SpeedMultiplier:
 		Modifier: 125
 	-SpawnActorOnDeath:
-	Explodes@ATOMICENGINES:
+	FireWarheadsOnDeath@ATOMICENGINES:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: !being-warped
@@ -1217,6 +1255,8 @@ GTNK.squad:
 	-SpeedMultiplier@CRUSHATTEMPTSLOW:
 	-SpeedMultiplier@CRUSHSLOW:
 	-Upgradeable@LASHER:
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 3TNK.RHINO.ATOMICYURI:
 	Inherits: 3TNK.RHINO.ATOMIC
@@ -1252,6 +1292,8 @@ GTNK.squad:
 	-ReplacedInQueue:
 	-Upgradeable@LASHER:
 	-WithDecoration@UpgradeOverlay:
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 4TNK:
 	Inherits: ^Tank
@@ -1387,6 +1429,8 @@ GTNK.squad:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 4TNK.ATOMIC:
 	Inherits: 4TNK
@@ -1402,7 +1446,7 @@ GTNK.squad:
 	Tooltip:
 		Name: Atomic Mammoth Tank
 	-SpawnActorOnDeath:
-	Explodes@ATOMICUPGRADE:
+	FireWarheadsOnDeath@ATOMICUPGRADE:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: !being-warped
@@ -1428,6 +1472,7 @@ GTNK.squad:
 		Name: Eradicator
 	TooltipExtras:
 		Weaknesses: • Cannot attack Aircraft
+		Attributes: • Can crush concrete walls\n• Self repairs to 50% out of combat\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~!atomicengines.upgrade, ~erad.upgrade, ~!ovld.upgrade, ~!apoc.upgrade, ~techlevel.high
 		Description: Big and slow tank armed with a radiation cannon.
@@ -1474,6 +1519,7 @@ GTNK.squad:
 		Name: Atomic Eradicator
 	TooltipExtras:
 		Weaknesses: • Cannot attack Aircraft
+		Attributes: • Can crush concrete walls\n• Self repairs to 50% out of combat\n• Explodes and leaves radiation on death\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~atomicengines.upgrade, ~erad.upgrade, ~!ovld.upgrade, ~!apoc.upgrade, ~techlevel.high
 		Description: Big and slow tank armed with a radiation cannon.
@@ -1549,7 +1595,7 @@ ARTY:
 		PauseOnCondition: empdisable || being-warped || blinded
 		FacingTolerance: 0
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	ProducibleWithLevel:
@@ -1557,14 +1603,14 @@ ARTY:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: vehicles.upgraded
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 ARTY.nod:
 	Inherits: ARTY
 	Inherits@TDPAL: ^TDPalette
 	WithDamageOverlay:
 		Image: smoke_mtd
-	Cloak@CRATE-CLOAK:
-		Palette: cloak
 	RenderSprites:
 		Image: artynod
 	Buildable:
@@ -1583,6 +1629,8 @@ ARTY.nod:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 HOWI:
 	Inherits: ARTY.nod
@@ -1640,7 +1688,7 @@ ARTY.Chrono:
 		Factions: gdi, talon, zocom, eagle, arc, nod, blackh, marked, legion, shadow
 		Condition: td
 	-Buildable:
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	Armament:
 		RequiresCondition: !scrin && !soviet && !td
@@ -1681,19 +1729,21 @@ ARTY.Chrono:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 		RequiresCondition: scrin
 	-MapEditorData:
+	-Encyclopedia:
 
 ARTY.TEMP:
 	Inherits: ARTY
 	Inherits@TEMPINC: ^TemporalReinforcement
 	RenderSprites:
 		Image: arty
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	-ActorLostNotification:
 	-Buildable:
 	-ChronoshiftableCA:
 	-HealthCapDamageMultiplier@CHRONO:
 	-MapEditorData:
+	-Encyclopedia:
 
 ISU:
 	Inherits: ^Tank
@@ -1761,7 +1811,7 @@ ISU:
 		RequiresCondition: atomic-ammo && has-atomic-ammo < 3
 	ReloadAmmoPoolCA@ATOMICAMMODECAY:
 		Count: -3
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	ProducibleWithLevel:
@@ -1776,6 +1826,10 @@ ISU:
 	SpawnActorOnDeath:
 		Actor: ISU.Husk
 		RequiresCondition: !being-warped
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		Subfaction: ukraine
 
 SPEC:
 	Inherits: ^VehicleTD
@@ -1830,7 +1884,7 @@ SPEC:
 		SelectionBarColor: 666666
 		Voice: Attack
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	ProducibleWithLevel:
@@ -1844,7 +1898,8 @@ SPEC:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead
@@ -1862,6 +1917,10 @@ SPEC:
 		ColorSource: Player
 	Voiced:
 		VoiceSet: SpectreVoice
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: shadow
 
 SAPC:
 	Inherits: ^Vehicle
@@ -1942,7 +2001,8 @@ SAPC:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead
@@ -1962,6 +2022,8 @@ SAPC:
 	WithColoredSelectionBox@INVIS:
 		RequiresCondition: invisibility || hidden
 		ColorSource: Player
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 SAPC.AI:
 	Inherits: SAPC
@@ -1974,6 +2036,7 @@ SAPC.AI:
 		InitialUnits: N1,N1,N4,N3,N3
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
 
 SAPC.AI2:
 	Inherits: SAPC
@@ -1984,6 +2047,7 @@ SAPC.AI2:
 		Prerequisites: ~botplayer, ~tmpp, tmpl, ~vehicles.nod, ~techlevel.high
 	Cargo:
 		InitialUnits: N1C,N1C,N5,N3C,N3C
+	-Encyclopedia:
 
 HARV:
 	Inherits: ^Vehicle-NOUPG
@@ -2008,7 +2072,6 @@ HARV:
 		Priority: 7
 		DecorationBounds: 1792, 1792
 	Harvester:
-		Capacity: 26
 		Resources: Tiberium, BlueTiberium, BlackTiberium, Ore, Gems
 		BaleUnloadDelay: 1
 		BaleLoadDelay: 4
@@ -2016,8 +2079,8 @@ HARV:
 		SearchFromHarvesterRadius: 8
 		HarvestFacings: 8
 		EmptyCondition: no-ore
-		MaxUnloadQueue: 8
-	WithHarvesterPipsDecoration:
+	DockClientManager:
+	WithStoresResourcesPipsDecoration:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
@@ -2050,10 +2113,10 @@ HARV:
 	GrantConditionOnTerrain@Ore:
 		Condition: onore
 		TerrainTypes: Ore
-	Explodes@Ore:
+	FireWarheadsOnDeath@Ore:
 		RequiresCondition: !no-ore && onore && !being-warped
 		Weapon: OreExplosion
-	Explodes@Tib:
+	FireWarheadsOnDeath@Tib:
 		RequiresCondition: !no-ore && ontib && !being-warped
 		Weapon: TibExplosion
 	-Crushable:
@@ -2096,10 +2159,16 @@ HARV:
 	RejectsOrders@Transforming:
 		RequiresCondition: charv-upgrade
 	TransferResourcesOnTransform:
-	UpdatesKillCount@BuildingsOrHarvesters:
-		Type: BuildingsOrHarvesters
+	UpdatesCount@NodCovenant:
+		Type: NodCovenant
+		UpdateOn: Killed
 	ReplacedInQueue:
 		Actors: harv.chrono
+	StoresResources:
+		Capacity: 26
+		Resources: Tiberium, BlueTiberium, BlackTiberium, Ore, Gems
+	Encyclopedia:
+		Category: Allies/Vehicles; Soviets/Vehicles
 
 HARV.Chrono:
 	Inherits: HARV
@@ -2117,9 +2186,9 @@ HARV.Chrono:
 	Mobile:
 		Voice: Move
 	Harvester:
-		Capacity: 18
 		HarvestVoice: Harvest
-		DeliverVoice: Deliver
+	DockClientManager:
+		Voice: Deliver
 	ChronoResourceDelivery:
 		Image: chrono
 		Palette: ra2effect-ignore-lighting-alpha75
@@ -2138,6 +2207,10 @@ HARV.Chrono:
 	-TransformOnCondition:
 	-TransferResourcesOnTransform:
 	-RejectsOrders@Transforming:
+	StoresResources:
+		Capacity: 18
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 MCV:
 	Inherits: ^Vehicle-NOUPG
@@ -2196,8 +2269,11 @@ MCV:
 		TargetTypes: ChaosImmune
 	DamageTypeDamageMultiplier@A2GPROTECTION:
 		Modifier: 60
-	UpdatesKillCount@BuildingsOrHarvesters:
-		Type: BuildingsOrHarvesters
+	UpdatesCount@NodCovenant:
+		Type: NodCovenant
+		UpdateOn: Killed
+	Encyclopedia:
+		Category: Allies/Vehicles; Soviets/Vehicles
 
 JEEP:
 	Inherits: ^Vehicle
@@ -2299,19 +2375,22 @@ JEEP:
 		ValidRelationships: Ally
 		AlwaysShowMaxRange: true
 		RequiresCondition: optics-active
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 JEEP.TEMP:
 	Inherits: JEEP
 	Inherits@TEMPINC: ^TemporalReinforcement
 	RenderSprites:
 		Image: jeep
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	-ActorLostNotification:
 	-Buildable:
 	-ChronoshiftableCA:
 	-HealthCapDamageMultiplier@CHRONO:
 	-MapEditorData:
+	-Encyclopedia:
 
 APC:
 	Inherits: ^Tank
@@ -2398,6 +2477,8 @@ APC:
 		Actor: rapc
 		UpgradeAtActors: fix, rep, srep
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 RAPC:
 	Inherits: APC
@@ -2444,6 +2525,7 @@ APC.AI:
 	-ReplacedInQueue:
 	-Upgradeable@RAIDER:
 	-WithDecoration@UpgradeOverlay:
+	-Encyclopedia:
 
 RAPC.AI:
 	Inherits: RAPC
@@ -2456,6 +2538,7 @@ RAPC.AI:
 		InitialUnits: E1,E1,E1,E3,E3
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
 
 MNLY:
 	Inherits: ^Tank
@@ -2505,10 +2588,8 @@ MNLY:
 		DetectionTypes: Mine
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ATMine
-	RenderSprites:
-		Image: MNLY
 	Rearmable:
 		RearmActors: fix, rep
 	Targetable@ChaosImmune:
@@ -2533,6 +2614,8 @@ MNLY:
 	-WithDecoration@BOMBARD:
 	-WithDecoration@BOMBARD2:
 	-WithDecoration@BOMBARD3:
+	Encyclopedia:
+		Category: Allies/Vehicles; Soviets/Vehicles; GDI/Vehicles; Nod/Vehicles
 
 TRUK:
 	Inherits: ^Vehicle
@@ -2571,6 +2654,8 @@ TRUK:
 	-WithDecoration@BOMBARD:
 	-WithDecoration@BOMBARD2:
 	-WithDecoration@BOMBARD3:
+	Encyclopedia:
+		Category: Allies/Vehicles; Soviets/Vehicles; GDI/Vehicles; Nod/Vehicles
 
 TRUK.DROP:
 	Inherits: TRUK
@@ -2589,6 +2674,7 @@ TRUK.DROP:
 	SelectionDecorations:
 	RejectsOrders:
 	Interactable:
+	-Encyclopedia:
 
 MGG:
 	Inherits: ^Vehicle
@@ -2597,7 +2683,7 @@ MGG:
 		Queue: VehicleSQ, VehicleMQ
 		BuildPaletteOrder: 301
 		Prerequisites: atek, ~vehicles.allies, ~techlevel.high
-		Description: Regenerates the shroud nearby, obscuring enemy vision.\n  Can channel the effect to reduce enemy weapon range and vision.
+		Description: Regenerates the shroud nearby, obscuring enemy vision. Can channel the effect to reduce enemy weapon range and vision.
 	TooltipExtras:
 		Attributes: • Special Ability: Toggle Gap Generator
 	Valued:
@@ -2646,6 +2732,8 @@ MGG:
 		PauseOnCondition: empdisable || being-warped
 	Turreted:
 		Offset: -299,0,171
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 MRJ:
 	Inherits: ^Vehicle
@@ -2701,6 +2789,8 @@ MRJ:
 		RequiresCondition: charging
 		Offset: -256,0,256
 		IsDecoration: True
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 MSG:
 	Inherits: ^Vehicle
@@ -2780,6 +2870,10 @@ MSG:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: shadow
 
 TTRA:
 	Inherits: ^Tank
@@ -2853,6 +2947,8 @@ TTRA:
 	GrantConditionOnPrerequisite@TARC:
 		Condition: tarc-upgrade
 		Prerequisites: tarc.upgrade
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 TTNK:
 	Inherits: ^Tank
@@ -2921,6 +3017,10 @@ TTNK:
 	GrantConditionOnPrerequisite@TARC:
 		Condition: tarc-upgrade
 		Prerequisites: tarc.upgrade
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		Subfaction: russia
 
 DTRK:
 	Inherits: ^Vehicle
@@ -2949,7 +3049,7 @@ DTRK:
 		Voice: Move
 	RevealsShroud:
 		Range: 4c0
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
@@ -2980,6 +3080,8 @@ DTRK:
 	ProductionCostMultiplier@IRAQBONUS:
 		Multiplier: 90
 		Prerequisites: player.iraq
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 CTNK:
 	Inherits: ^Vehicle
@@ -3074,6 +3176,8 @@ CTNK:
 		SoundFiles: chronoprep.aud
 		RequiresCondition: chronoprep
 		Interval: 1000
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 QTNK:
 	Inherits: ^Tank
@@ -3119,7 +3223,7 @@ QTNK:
 		DetonationWeapon: MADTankDetonate
 		FirstDetonationImmediate: true
 		PauseOnCondition: empdisable || being-warped
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 	Selectable:
 		DecorationBounds: 1877, 1621, 0, -170
@@ -3142,6 +3246,8 @@ QTNK:
 	Targetable@DriverKillImmune:
 		TargetTypes: DriverKillImmune
 		RequiresCondition: deployed
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 AMCV:
 	Inherits: ^VehicleTD-NOUPG
@@ -3201,8 +3307,11 @@ AMCV:
 		TargetTypes: ChaosImmune
 	DamageTypeDamageMultiplier@A2GPROTECTION:
 		Modifier: 60
-	UpdatesKillCount@BuildingsOrHarvesters:
-		Type: BuildingsOrHarvesters
+	UpdatesCount@NodCovenant:
+		Type: NodCovenant
+		UpdateOn: Killed
+	Encyclopedia:
+		Category: GDI/Vehicles; Nod/Vehicles
 
 HMMV:
 	Inherits: ^VehicleTD
@@ -3289,13 +3398,15 @@ HMMV:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 200
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 HMMV.TOW:
 	Inherits: HMMV
 	RenderSprites:
 		Image: hmmv
 	Buildable:
-		Description: Fast scout & anti-infantry vehicle\n  with anti-tank missile launcher.
+		Description: Fast scout & anti-infantry vehicle with anti-tank missile launcher.
 		Prerequisites: ~vehicles.hmmv, ~tow.upgrade, ~techlevel.high
 	Valued:
 		Cost: 575
@@ -3415,6 +3526,10 @@ GDRN:
 		RequiresCondition: !mindcontrolled
 	Sellable:
 		RequiresCondition: unit-sellable && !c4 && !being-warped
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: arc
 
 GDRN.TOW:
 	Inherits: GDRN
@@ -3551,6 +3666,8 @@ BGGY:
 		RequiresCondition: player-blackh && decoy-upgrade && ammo && !(empdisable || being-warped)
 		AmmoPool: decoyspawner
 		FaceTarget: true
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 ^DecoyUnit:
 	GrantTimedCondition@Decoy:
@@ -3596,7 +3713,7 @@ FTNK.Decoy:
 	Armament@PRIMARY:
 		Weapon: BigFlamerTD.Decoy
 	-Armament@FF:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: DecoyDespawn
 		EmptyWeapon: DecoyDespawn
 		-RequiresCondition:
@@ -3620,6 +3737,7 @@ FTNK.Decoy:
 	-Sellable:
 	-ExternalCondition@UNITSELL:
 	-MapEditorData:
+	-Encyclopedia:
 
 HFTK.Decoy:
 	Inherits: HFTK
@@ -3638,7 +3756,7 @@ HFTK.Decoy:
 		Weapon: HeavyFlameTankFlamer.UPG.Decoy
 	-Armament@FF:
 	-Armament@FFUPG:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: DecoyDespawn
 		EmptyWeapon: DecoyDespawn
 		-RequiresCondition:
@@ -3662,6 +3780,7 @@ HFTK.Decoy:
 	-Sellable:
 	-ExternalCondition@UNITSELL:
 	-MapEditorData:
+	-Encyclopedia:
 
 APC2:
 	Inherits: ^TankTD
@@ -3758,6 +3877,8 @@ APC2:
 		Actor: vulc
 		UpgradeAtActors: fix, rep, srep
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: GDI/Vehicles; Nod/Vehicles
 
 APC2.NODAI:
 	Inherits: APC2
@@ -3771,6 +3892,7 @@ APC2.NODAI:
 	-ReplacedInQueue:
 	-Upgradeable@VULCAN:
 	-WithDecoration@UpgradeOverlay:
+	-Encyclopedia:
 
 APC2.GDIAI:
 	Inherits: APC2
@@ -3784,6 +3906,7 @@ APC2.GDIAI:
 	-ReplacedInQueue:
 	-Upgradeable@VULCAN:
 	-WithDecoration@UpgradeOverlay:
+	-Encyclopedia:
 
 APC2.Reinforce:
 	Inherits: APC2
@@ -3800,6 +3923,7 @@ APC2.Reinforce:
 	UnloadOnCondition@UNLOAD:
 		RequiresCondition: damage
 		BotOnly: False
+	-Encyclopedia:
 
 VULC:
 	Inherits: ^TankTD
@@ -3974,6 +4098,8 @@ VULC:
 	Targetable@MindControlImmune:
 		TargetTypes: MindControlImmune
 		RequiresCondition: loaded-cmdo
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 VULC.AI:
 	Inherits: VULC
@@ -3986,6 +4112,7 @@ VULC.AI:
 		InitialUnits: N1,N1,N1,N2,N3
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
 
 VULC.Reinforce:
 	Inherits: VULC
@@ -4002,6 +4129,7 @@ VULC.Reinforce:
 	UnloadOnCondition@UNLOAD:
 		RequiresCondition: damage
 		BotOnly: False
+	-Encyclopedia:
 
 LTNK:
 	Inherits: ^TankTD
@@ -4100,6 +4228,8 @@ LTNK:
 		Prerequisites: lastnk.upgrade
 	ReplacedInQueue:
 		Actors: ltnk.laser
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 LTNK.Laser:
 	Inherits: LTNK
@@ -4204,9 +4334,8 @@ MTNK:
 		Turret: secondary
 		Weapon: PointLaser
 		LocalOffset: 0,10,90
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: empdisable || being-warped || pointlaser-charging
 		RequiresCondition: pointdef-upgrade
-		ReloadingCondition: pointlaser-charging
 		ForceTargetRelationships: Enemy
 	AttackTurreted:
 		Turrets: primary, secondary
@@ -4235,6 +4364,10 @@ MTNK:
 		PointDefenseTypes: Missile
 		RequiresCondition: pointdef-upgrade && !gshield && !gshield-charging
 		ValidRelationships: Enemy
+	GrantTimedConditionOnPointDefenseHit@POINTDEF:
+		Condition: pointlaser-charging
+		RequiresCondition: pointdef-upgrade
+		ScaleChargeTimeWithDamageAmount: 21
 	GrantConditionOnPrerequisite@POINTDEF:
 		Condition: pointdef-upgrade
 		Prerequisites: pointdef.upgrade
@@ -4248,8 +4381,9 @@ MTNK:
 		Modifier: 25
 		Duration: 2
 		ScaleChargeTimeWithDamage: true
-		ScaleChargeTimeWithDamageAmount: 7
-		RequiresCondition: pointdef-upgrade && !pointlaser-charging
+		ScaleChargeTimeWithDamageAmount: 21
+		PauseOnCondition: pointlaser-charging
+		RequiresCondition: pointdef-upgrade
 	GrantTimedCondition@NSHIELDVISUAL:
 		Condition: gshieldvisual
 		RequiresCondition: gshield
@@ -4267,6 +4401,8 @@ MTNK:
 		Cost: 0
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: GDI/Vehicles; Nod/Vehicles
 
 MTNK.Drone:
 	Inherits: MTNK
@@ -4340,8 +4476,14 @@ MTNK.Drone:
 	-ReplacedInQueue:
 	-Upgradeable@BDRONE:
 	-WithDecoration@UpgradeOverlay:
+	-ProducibleWithLevel:
+	-WithProductionIconOverlay:
 	Sellable:
 		RequiresCondition: unit-sellable && !c4 && !being-warped
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: arc
 
 MTNK.Laser:
 	Inherits: MTNK
@@ -4358,6 +4500,7 @@ MTNK.Laser:
 	-GrantConditionOnPrerequisite@POINTDEF:
 	-GrantConditionOnPrerequisite@LaserTank:
 	-PointDefense:
+	-GrantTimedConditionOnPointDefenseHit@POINTDEF:
 	-TimedDamageMultiplier@GSHIELD:
 	-GrantTimedCondition@NSHIELDVISUAL:
 	WithIdleOverlay@NSHIELD:
@@ -4375,6 +4518,10 @@ MTNK.Laser:
 		Class: mtnk
 	-ReplacedInQueue:
 	-Upgradeable@BDRONE:
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: legion
 
 MDRN:
 	Inherits: ^Vehicle
@@ -4462,11 +4609,15 @@ MDRN:
 	-GrantCondition@CarriedImmobile:
 	WithIdleOverlay@NSHIELD:
 		Image: nshield-overlay-sm
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: VisualExplodeSmall
 		EmptyWeapon: VisualExplodeSmall
 	Sellable:
 		RequiresCondition: unit-sellable && !c4 && !being-warped
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: arc
 
 MDRN.Attached:
 	Inherits: MDRN
@@ -4474,6 +4625,7 @@ MDRN.Attached:
 	-Selectable:
 	-Tooltip:
 	Interactable:
+		Bounds: 64,64
 	RenderSprites:
 		Image: mdrn
 	-Mobile:
@@ -4519,6 +4671,7 @@ MDRN.Attached:
 	-PowerMultiplier@HACKED:
 	-ChronoshiftableCA:
 	-HealthCapDamageMultiplier@CHRONO:
+	-Encyclopedia:
 
 HTNK:
 	Inherits: ^TankTD
@@ -4627,6 +4780,8 @@ HTNK:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 HTNK.Ion:
 	Inherits: HTNK
@@ -4646,6 +4801,8 @@ HTNK.Ion:
 	-Upgradeable@HOVER:
 	-Upgradeable@DRONE:
 	-WithDecoration@UpgradeOverlay:
+	EncyclopediaExtras:
+		Subfaction: zocom
 
 HTNK.Hover:
 	Inherits: HTNK
@@ -4687,6 +4844,8 @@ HTNK.Hover:
 	-Upgradeable@HOVER:
 	-Upgradeable@DRONE:
 	-WithDecoration@UpgradeOverlay:
+	EncyclopediaExtras:
+		Subfaction: eagle
 
 HTNK.Drone:
 	Inherits: HTNK
@@ -4750,6 +4909,8 @@ HTNK.Drone:
 	-WithDecoration@UpgradeOverlay:
 	Sellable:
 		RequiresCondition: unit-sellable && !c4 && !being-warped
+	EncyclopediaExtras:
+		Subfaction: arc
 
 MSAM:
 	Inherits: ^TankTD
@@ -4775,7 +4936,7 @@ MSAM:
 		Prerequisites: anyradar, ~vehicles.msam, ~techlevel.medium
 		Queue: VehicleSQ, VehicleMQ
 		IconPalette: chrometd
-		Description: Multiple Launch Rocket System.\n  Long-range guided artillery with anti-air capability.
+		Description: Multiple Launch Rocket System. Long-range guided artillery with anti-air capability.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Defenses, Infantry, Light Armor
 		Weaknesses: • Weak vs Heavy Armor
@@ -4804,7 +4965,7 @@ MSAM:
 	AttackMove:
 		Voice: Attack
 	WithSpriteTurret:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -4884,6 +5045,8 @@ MSAM:
 		ReloadingCondition: reloading-secondary
 	Voiced:
 		VoiceSet: MsamVoice
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 MLRS:
 	Inherits: ^TankTD
@@ -4968,7 +5131,7 @@ MLRS:
 	GrantConditionOnMovement@MOVING:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 		Condition: moving
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 	ReloadAmmoPool@1:
 		Delay: 120
@@ -4986,6 +5149,21 @@ MLRS:
 	GrantConditionOnPrerequisite@UPG:
 		Condition: blacknapalm-upgrade
 		Prerequisites: blacknapalm.upgrade
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		RenderPreviewActor: mlrs.preview
+
+MLRS.Preview:
+	Inherits: ^PreviewDummy
+	Inherits@TDPalette: ^TDPalette
+	RenderSprites:
+		Image: mlrs
+	WithFacingSpriteBody:
+	WithSpriteTurret:
+		Sequence: turret
+	Turreted:
+		Offset: -128,0,128
 
 STNK.Nod:
 	Inherits: ^VehicleTD
@@ -4995,7 +5173,7 @@ STNK.Nod:
 	Inherits@A2GPROTECTION: ^AirToGroundProtection
 	Inherits@UpgradeOverlay: ^UpgradeOverlay
 	RenderSprites:
-		Image: STNKTnod
+		Image: stnktnod
 	Valued:
 		Cost: 1100
 	Tooltip:
@@ -5032,7 +5210,8 @@ STNK.Nod:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead && !parachute
@@ -5102,6 +5281,8 @@ STNK.Nod:
 		Voice: Move
 	AttackMove:
 		Voice: Attack
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 HSTK:
 	Inherits: ^TankTD
@@ -5110,7 +5291,7 @@ HSTK:
 	Inherits@BERSERK: ^Berserk
 	Inherits@A2GPROTECTION: ^AirToGroundProtection
 	RenderSprites:
-		Image: HSTK
+		Image: hstk
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -5147,7 +5328,8 @@ HSTK:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead && !parachute
@@ -5209,6 +5391,10 @@ HSTK:
 		Voice: Move
 	AttackMove:
 		Voice: Attack
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: shadow
 
 BIKE:
 	Inherits: ^VehicleTD
@@ -5289,6 +5475,8 @@ BIKE:
 		Name: tibcore
 		RequiresCondition: tibcore-upgrade
 		Sequence: idle-upgrade
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 FTNK:
 	Inherits: ^TankTD
@@ -5337,7 +5525,7 @@ FTNK:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped || blinded || parachute
 		FacingTolerance: 0
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
 	ProducibleWithLevel:
@@ -5345,6 +5533,8 @@ FTNK:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: vehicles.upgraded
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 HFTK:
 	Inherits: ^TankTD
@@ -5416,7 +5606,7 @@ HFTK:
 	WithMuzzleOverlay:
 	Voiced:
 		VoiceSet: FlameTankVoice
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
 	ProducibleWithLevel:
@@ -5447,6 +5637,10 @@ HFTK:
 	FirepowerMultiplier@Backload:
 		Modifier: 82
 		RequiresCondition: burstcount >= 10
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: blackh
 
 HARV.TD:
 	Inherits: ^VehicleTD-NOUPG
@@ -5474,7 +5668,6 @@ HARV.TD:
 		Priority: 7
 		DecorationBounds: 1536, 1536
 	Harvester:
-		Capacity: 26
 		Resources: Tiberium, BlueTiberium, BlackTiberium, Ore, Gems
 		BaleUnloadDelay: 1
 		BaleLoadDelay: 4
@@ -5482,8 +5675,8 @@ HARV.TD:
 		SearchFromHarvesterRadius: 8
 		HarvestFacings: 8
 		EmptyCondition: no-ore
-		MaxUnloadQueue: 8
-	WithHarvesterPipsDecoration:
+	DockClientManager:
+	WithStoresResourcesPipsDecoration:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
@@ -5516,10 +5709,10 @@ HARV.TD:
 	GrantConditionOnTerrain@Ore:
 		Condition: onore
 		TerrainTypes: Ore
-	Explodes@Ore:
+	FireWarheadsOnDeath@Ore:
 		RequiresCondition: !no-ore && onore && !being-warped
 		Weapon: OreExplosion
-	Explodes@Tib:
+	FireWarheadsOnDeath@Tib:
 		RequiresCondition: !no-ore && ontib && !being-warped
 		Weapon: TibExplosion
 	-Crushable:
@@ -5550,8 +5743,9 @@ HARV.TD:
 		Step: 2250
 	DamageTypeDamageMultiplier@A2GPROTECTION:
 		Modifier: 60
-	UpdatesKillCount@BuildingsOrHarvesters:
-		Type: BuildingsOrHarvesters
+	UpdatesCount@NodCovenant:
+		Type: NodCovenant
+		UpdateOn: Killed
 	GrantConditionOnPrerequisite@Stealth:
 		Condition: sharv-upgrade
 		Prerequisites: sharv.upgrade
@@ -5563,6 +5757,11 @@ HARV.TD:
 	TransferResourcesOnTransform:
 	ReplacedInQueue:
 		Actors: harv.td.upg
+	StoresResources:
+		Capacity: 26
+		Resources: Tiberium, BlueTiberium, BlackTiberium, Ore, Gems
+	Encyclopedia:
+		Category: GDI/Vehicles; Nod/Vehicles
 
 HARV.TD.UPG:
 	Inherits: HARV.TD
@@ -5582,7 +5781,8 @@ HARV.TD.UPG:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead && !parachute
@@ -5596,6 +5796,8 @@ HARV.TD.UPG:
 	-RejectsOrders@Transforming:
 	-TransferResourcesOnTransform:
 	-ReplacedInQueue:
+	Encyclopedia:
+		Category: Nod/Vehicles
 
 BTR:
 	Inherits: ^Tank
@@ -5716,6 +5918,8 @@ BTR:
 		RequiresCondition: !mindcontrolled
 	Voiced:
 		VoiceSet: BtrVoice
+	Encyclopedia:
+		Category: Soviets/Vehicles
 
 BTR.AI:
 	Inherits: BTR
@@ -5728,6 +5932,7 @@ BTR.AI:
 		InitialUnits: E1,E1,E1,E3,E4
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
 
 BTR.YURI:
 	Inherits: BTR
@@ -5862,6 +6067,8 @@ BTR.YURI:
 		VoiceSet: GattlingTankVoice
 	-Upgradeable@GATTLING:
 	-WithDecoration@UpgradeOverlay:
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 BTR.YURI.AI:
 	Inherits: BTR.YURI
@@ -5874,6 +6081,8 @@ BTR.YURI.AI:
 		InitialUnits: E1,E1,E1,E3,E4
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
+	-EncyclopediaExtras:
 
 TRPC:
 	Inherits: ^Tank
@@ -5973,7 +6182,10 @@ TRPC:
 		Range: 4c0
 		Condition: trpc-inspiration
 		ValidRelationships: Ally
-		RequiresCondition: !passenger
+		RequiresCondition: !passenger && !inspiration-delay
+	GrantTimedCondition@InspirationDelay:
+		Duration: 10
+		Condition: inspiration-delay
 	WithRadiatingCircle:
 		EndRadius: 4c0
 		Interval: 75
@@ -6010,6 +6222,10 @@ TRPC:
 		RequiresCondition: cmsr-inspiration || ovld-inspiration || trpc-inspiration
 	Sellable:
 		RefundPercent: 10
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Infantry Doctrine.
 
 IFV:
 	Inherits: ^Tank
@@ -6198,7 +6414,7 @@ IFV:
 		RequiresCondition: flamturr || chemturr || hoplturr
 	TooltipExtras@spyturr:
 		Weaknesses: • Cannot deal damage
-		Attributes: • Long vision range\n• Can detect cloaked units\n• Marks vehicle/structure targets,\n    revealing them and increasing the damage they take
+		Attributes: • Long vision range\n• Can detect cloaked units\n• Marks vehicle/structure targets, revealing them and increasing the damage they take
 		IsStandard: false
 		RequiresCondition: spyturr
 	TooltipExtras@rmbcturr:
@@ -6282,7 +6498,7 @@ IFV:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	RevealsShroud@SPY:
-		Range: 9c0
+		Range: 7c0
 		MinRange: 4c0
 		RevealGeneratedShroud: False
 		RequiresCondition: spyturr
@@ -6546,6 +6762,7 @@ IFV:
 		RequiresCondition: hackturr
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || blinded
+		TargetFrozenActors: True
 	WithMuzzleOverlay:
 	WithSpriteTurret@defaultturr:
 		RequiresCondition: !full || nochange
@@ -6749,7 +6966,7 @@ IFV:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: ivanturr
 		Offset: 0,0,40
-	Explodes@IVAN:
+	FireWarheadsOnDeath@IVAN:
 		Weapon: MicroNuke
 		EmptyWeapon: MicroNuke
 		DamageSource: Killer
@@ -6927,7 +7144,8 @@ IFV:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: (shadturr || stlkturr) && !cloak-force-disabled && !capturing && !being-warped && !empdisable && !driver-dead && !parachute
@@ -7019,6 +7237,8 @@ IFV:
 	WithColoredSelectionBox@INVIS:
 		RequiresCondition: invisibility || hidden
 		ColorSource: Player
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 IFV.AI:
 	Inherits: ^Tank
@@ -7264,6 +7484,10 @@ RECK:
 		Modifier: 80
 	SpeedMultiplier@TigerGuard:
 		Modifier: 90
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Stolen from Allied War Factory.
 
 TITN:
 	Inherits: ^TankTD
@@ -7384,6 +7608,10 @@ TITN:
 		RequiresCondition: seek2 && !gyrostabilizers
 	RangeMultiplier@SEEK3:
 		RequiresCondition: seek3 && !gyrostabilizers
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: talon
 
 TITN.RAIL:
 	Inherits: TITN
@@ -7528,13 +7756,17 @@ JUGG:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: vehicles.upgraded
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	SpawnActorOnDeath:
 		Actor: JUGG.Husk
 	WithIdleOverlay@MINDCONTROL:
 		Offset: 0,0,512
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: talon
 
 TTRK:
 	Inherits: DTRK
@@ -7549,9 +7781,11 @@ TTRK:
 		Attributes: • Special Ability: Detonate
 	Tooltip:
 		Name: Toxin Truck
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: UnitExplodeToxinTruck
 		EmptyWeapon: UnitExplodeToxinTruck
+	Encyclopedia:
+		Category: Other/Units
 
 DISR:
 	Inherits: ^TankTD
@@ -7640,6 +7874,10 @@ DISR:
 	-RangeMultiplier@SEEK:
 	-RangeMultiplier@SEEK2:
 	-RangeMultiplier@SEEK3:
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: zocom
 
 HSAM:
 	Inherits: ^VehicleTD
@@ -7661,7 +7899,7 @@ HSAM:
 		Prerequisites: anyradar, ~vehicles.eagle, ~techlevel.medium
 		Queue: VehicleSQ, VehicleMQ
 		IconPalette: chrometd
-		Description: Prototype Hover Multiple Launch Rocket System.\n  Long-range guided artillery with anti-air capability.
+		Description: Prototype Hover Multiple Launch Rocket System. Long-range guided artillery with anti-air capability.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Defenses, Infantry, Light Armor
 		Weaknesses: • Weak vs Heavy Armor
@@ -7700,7 +7938,7 @@ HSAM:
 	AttackMove:
 		Voice: Attack
 	WithSpriteTurret:
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	ProducibleWithLevel:
@@ -7733,7 +7971,7 @@ HSAM:
 		PauseOnCondition: reloading-primary
 		ReloadingCondition: reloading-secondary
 	Armament@PRIMARYUPG1:
-		Weapon: 227mm.Hypersonic
+		Weapon: 227mmH.Hypersonic
 		LocalOffset: 213,128,0, 213,-128,0
 		LocalYaw: 75, -75
 		RequiresCondition: hypersonic-upgrade
@@ -7748,7 +7986,7 @@ HSAM:
 		PauseOnCondition: reloading-primary
 		ReloadingCondition: reloading-secondary
 	Armament@PRIMARYUPG2:
-		Weapon: 227mm.Hammerhead
+		Weapon: 227mmH.Hammerhead
 		LocalOffset: 213,128,0, 213,-128,0
 		LocalYaw: 100, -100
 		RequiresCondition: hammerhead-upgrade
@@ -7763,7 +8001,7 @@ HSAM:
 		PauseOnCondition: reloading-primary
 		ReloadingCondition: reloading-secondary
 	Armament@PRIMARYUPG3:
-		Weapon: 227mm.Hailstorm
+		Weapon: 227mmH.Hailstorm
 		LocalOffset: 213,128,0, 213,-128,0
 		LocalYaw: 100, -100
 		RequiresCondition: hailstorm-upgrade
@@ -7787,6 +8025,10 @@ HSAM:
 		RequiresCondition: onwater
 	Voiced:
 		VoiceSet: MsamVoice
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: eagle
 
 RTNK:
 	Inherits: ^Tank
@@ -7865,7 +8107,8 @@ RTNK:
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
 		UncloakOn: Attack, Dock, Move, Damage, Heal
-		Palette: player
+		CloakStyle: Palette
+		CloakedPalette: player
 		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead
 		PauseOnCondition: invisibility
@@ -7895,6 +8138,10 @@ RTNK:
 	FirepowerMultiplier@Ambush:
 		Modifier: 150
 		RequiresCondition: hidden
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		Subfaction: england
 
 V3RL:
 	Inherits: ^Vehicle
@@ -7959,7 +8206,7 @@ V3RL:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -7973,6 +8220,16 @@ V3RL:
 	ProductionCostMultiplier@UkraineBonus:
 		Multiplier: 90
 		Prerequisites: player.ukraine
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		RenderPreviewActor: v3rl.preview
+
+V3RL.Preview:
+	Inherits: ^PreviewDummy
+	RenderSprites:
+		Image: v3rl
+	WithFacingSpriteBody:
 
 V3:
 	Inherits: ^ShootableMissile
@@ -7998,10 +8255,10 @@ V3:
 		Weapon: V3Weapon
 		Type: Footprint
 		RequiresCondition: !airborne
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: V3ExplodeAirborne
 		RequiresCondition: airborne
-	ThrowsShrapnel@Debris:
+	FireProjectilesOnDeath@Debris:
 		Weapons: SmallDebris
 		Pieces: 3, 5
 		Range: 1c511, 3c0
@@ -8071,13 +8328,17 @@ TNKD:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 1194, 1194
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		Subfaction: germany
 
 TNKD.TEMP:
 	Inherits: TNKD
 	Inherits@TEMPINC: ^TemporalReinforcement
 	RenderSprites:
 		Image: tnkd
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !warpout
 	-ActorLostNotification:
 	-SpawnActorOnDeath:
@@ -8085,6 +8346,8 @@ TNKD.TEMP:
 	-ChronoshiftableCA:
 	-HealthCapDamageMultiplier@CHRONO:
 	-MapEditorData:
+	-Encyclopedia:
+	-EncyclopediaExtras:
 
 MSAR:
 	Inherits: ^VehicleTD
@@ -8104,7 +8367,7 @@ MSAR:
 		BuildPaletteOrder: 321
 		IconPalette: chrometd
 		Prerequisites: anyradar, ~vehicles.gdi, ~techlevel.medium
-		Description: When deployed, detects enemy vehicles,\n  aircraft and structures within a large radius.
+		Description: When deployed, detects enemy vehicles, aircraft and structures within a large radius.
 	TooltipExtras:
 		Weaknesses: • Unarmed
 		Attributes: • Can detect cloaked units (when deployed)\n• Increases nearby ground unit vision range (when deployed)\n• Special Ability: Activate Sensor Array
@@ -8180,6 +8443,8 @@ MSAR:
 	-WithDecoration@BOMBARD:
 	-WithDecoration@BOMBARD2:
 	-WithDecoration@BOMBARD3:
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 PTNK:
 	Inherits: ^Tank
@@ -8255,6 +8520,8 @@ PTNK:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Allies/Vehicles
 
 PCAN:
 	Inherits: PTNK
@@ -8366,6 +8633,10 @@ WTNK:
 	GrantConditionOnPrerequisite@UPG:
 		Condition: microwave-upgrade
 		Prerequisites: microwave.upgrade
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		Subfaction: legion
 
 #adjust offsets
 BATF:
@@ -8382,7 +8653,7 @@ BATF:
 		Queue: VehicleSQ, VehicleMQ
 		BuildPaletteOrder: 223
 		Prerequisites: atek, ~vehicles.france, ~techlevel.high
-		Description: Tough infantry transport with weapon ports\n  for infantry to fire from.
+		Description: Tough infantry transport with weapon ports for infantry to fire from.
 	TooltipExtras:
 		Attributes: • Can crush smaller vehicles and concrete walls
 	Valued:
@@ -8594,6 +8865,10 @@ BATF:
 	RejectsOrders@AnathemaNoUnload:
 		Reject: Unload
 		RequiresCondition: anathema
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		Subfaction: france
 
 BATF.AI:
 	Inherits: BATF
@@ -8605,6 +8880,8 @@ BATF.AI:
 		InitialUnits: E1,E1,E3,E3,E3
 	WithCargoSounds:
 		-EnterSounds:
+	-Encyclopedia:
+	-EncyclopediaExtras:
 
 MEMP:
 	Inherits: ^TankTD
@@ -8724,6 +9001,8 @@ MEMP:
 		RequiresCondition: unit-sellable && !c4 && !being-warped
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Vehicle, Defense
+	Encyclopedia:
+		Category: GDI/Vehicles
 
 CDRN:
 	Inherits: ^VehicleTD
@@ -8743,7 +9022,7 @@ CDRN:
 		BuildPaletteOrder: 311
 		IconPalette: chrometd
 		Prerequisites: stek, ~vehicles.yuri, ~techlevel.high
-		Description: Drone armed with Chaos Gas which causes units\n  to become frenzied and attack indiscriminately.
+		Description: Drone armed with Chaos Gas which causes units to become frenzied and attack indiscriminately.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Light Armor, Infantry
 		Weaknesses: • Cannot attack Aircraft, Buildings, Defenses
@@ -8767,7 +9046,7 @@ CDRN:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: ChaosDroneExplodeSmall
 	AttackFrontal:
 		FacingTolerance: 512
@@ -8816,6 +9095,10 @@ CDRN:
 		Type: ChaosDrone
 		Range: 3c0
 		Color: c33d73
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		Subfaction: yuri
 
 CHPR:
 	Inherits: ^Tank
@@ -8833,7 +9116,7 @@ CHPR:
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Defenses, Aircraft
 		Weaknesses: • Weak vs Buildings
-		Attributes: • Target is disabled while being erased\n• Can crush concrete walls
+		Attributes: • Target is disabled while being erased\n• Can crush concrete walls\n• Special Ability: Teleport (with upgrade)
 	Valued:
 		Cost: 1700
 	Tooltip:
@@ -8939,6 +9222,10 @@ CHPR:
 	RangeMultiplier@TEMPORALFLUX:
 		RequiresCondition: tflx-upgrade
 		Modifier: 130
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		Subfaction: germany
 
 CRYO:
 	Inherits: ^TankTD
@@ -8957,7 +9244,7 @@ CRYO:
 		Prerequisites: ~vehicles.allies, alhq, ~sweden.coalition, ~techlevel.high
 		Queue: VehicleSQ, VehicleMQ
 		IconPalette: chrometd
-		Description: Long-range support artillery that slows enemies\n  and makes them take more damage.
+		Description: Long-range support artillery that slows enemies and makes them take more damage.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor
 		Weaknesses: • Cannot attack Aircraft
@@ -8991,7 +9278,7 @@ CRYO:
 		VoiceSet: CryoVoice
 	AttackMove:
 		Voice: Attack
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: CryoExplosion
 	Selectable:
 		DecorationBounds: 1194, 1194
@@ -9000,6 +9287,10 @@ CRYO:
 	WithProductionIconOverlay:
 		Types: Veterancy
 		Prerequisites: vehicles.upgraded
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Sweden Coalition.
 
 PBUL:
 	Inherits: ^VehicleTD
@@ -9012,7 +9303,7 @@ PBUL:
 		BuildPaletteOrder: 252
 		IconPalette: chrometd
 		Prerequisites: gtek, ~vehicles.eagle, ~techlevel.high
-		Description: Fast scout vehicle with rockets that disrupts weapons and vision.\n  Can designates targets, revealing them and increasing the damage they take.
+		Description: Fast scout vehicle with rockets that disrupts weapons and vision. Can designates targets, revealing them and increasing the damage they take.
 	TooltipExtras:
 		Strengths: • Strong vs Light Armor, Aircraft
 		Weaknesses: • Weak vs Infantry, Buildings, Defenses
@@ -9034,11 +9325,11 @@ PBUL:
 	Passenger:
 		Voice: Move
 	RevealsShroud:
-		MinRange: 6c0
-		Range: 8c0
+		MinRange: 5c0
+		Range: 7c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
-		Range: 6c0
+		Range: 5c0
 	Turreted:
 		TurnSpeed: 40
 		Offset: -200,0,120
@@ -9062,6 +9353,7 @@ PBUL:
 		PauseOnCondition: empdisable || being-warped || blinded
 		Voice: Attack
 		Armaments: primary, secondary, tertiary
+		TargetFrozenActors: true
 	AttackMove:
 		Voice: Attack
 	WithSpriteTurret:
@@ -9086,6 +9378,10 @@ PBUL:
 		ActiveUntilCancelled: true
 		UseDisabledArmaments: true
 		TargetFrozenActors: true
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: eagle
 
 CYCP:
 	Inherits: ^Tank
@@ -9137,6 +9433,10 @@ CYCP:
 	SpawnActorOnDeath:
 		Actor: CYCP.Husk
 		RequiresCondition: !being-warped
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Stolen from Soviet War Factory.
 
 BASI:
 	Inherits: ^TankTD
@@ -9196,7 +9496,8 @@ BASI:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1md.aud
-		Palette: cloak
+		CloakStyle: Palette
+		CloakedPalette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		RequiresCondition: !cloak-force-disabled && !being-warped && !empdisable && !driver-dead && !parachute
@@ -9209,6 +9510,10 @@ BASI:
 	WithColoredSelectionBox@INVIS:
 		RequiresCondition: invisibility || hidden
 		ColorSource: Player
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Stolen from GDI Weapons Factory.
 
 MANT:
 	Inherits: ^VehicleTD
@@ -9269,6 +9574,10 @@ MANT:
 		DetectionTypes: AirCloak
 		RequiresCondition: empdisable || being-warped
 	KeepsDistance:
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Stolen from Nod Airstrip.
 
 VIPR:
 	Inherits: ^VehicleTD
@@ -9337,6 +9646,10 @@ VIPR:
 	Targetable@ONWATER:
 		TargetTypes: Water, Ship
 		RequiresCondition: onwater
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Stolen from Scrin Warp Sphere.
 
 WOLV:
 	Inherits: ^VehicleTD
@@ -9405,11 +9718,18 @@ WOLV:
 		FacingTolerance: 32
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	WithProductionIconOverlay:
+		Types: Veterancy
+		Prerequisites: vehicles.upgraded
 	WithMuzzleOverlay:
 	RangeMultiplier@GYRO:
 		Modifier: 140
 	ReloadDelayMultiplier@GYRO:
 		Modifier: 140
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: talon
 
 XO:
 	Inherits: ^VehicleTD
@@ -9420,7 +9740,7 @@ XO:
 		Queue: VehicleSQ, VehicleMQ
 		BuildPaletteOrder: 251
 		Prerequisites: gtek, ~vehicles.zocom, ~techlevel.medium
-		Description: Light battle-mech armed with a laser and a coil-gun.\n  Able to jump short distances using its jump-pack.
+		Description: Light battle-mech armed with a laser and a coil-gun. Able to jump short distances using its jump-pack.
 	TooltipExtras:
 		Strengths: • Strong vs Light Armor, Heavy Armor, Buildings
 		Weaknesses: • Weak vs Defenses\n• Cannot attack Aircraft
@@ -9476,6 +9796,9 @@ XO:
 		RangeMargin: 0
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	WithProductionIconOverlay:
+		Types: Veterancy
+		Prerequisites: vehicles.upgraded
 	WithMuzzleOverlay:
 	Parachutable:
 		FallRate: 130
@@ -9528,6 +9851,10 @@ XO:
 	DamageMultiplier@Jumping:
 		Modifier: 50
 		RequiresCondition: jumping
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		Subfaction: zocom
 
 APOC:
 	Inherits: ^Tank
@@ -9651,6 +9978,10 @@ APOC:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Armor Doctrine.
 
 APOC.ATOMIC:
 	Inherits: APOC
@@ -9669,7 +10000,7 @@ APOC.ATOMIC:
 	WithFacingSpriteBody:
 	SpeedMultiplier:
 		Modifier: 125
-	Explodes@ATOMICUPGRADE:
+	FireWarheadsOnDeath@ATOMICUPGRADE:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: !being-warped
@@ -9687,6 +10018,7 @@ APOC.ERAD:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor, Heavy Armor
 		Weaknesses: • Cannot attack Aircraft
+		Attributes: • Can crush smaller vehicles and concrete walls\n• Self repairs to 50% out of combat\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~!atomicengines.upgrade, ~erad.upgrade, ~apoc.upgrade, ~techlevel.high
 		BuildPaletteOrder: 241
@@ -9719,6 +10051,8 @@ APOC.ERAD:
 	-Upgradeable@ERAD:
 	Voiced:
 		VoiceSet: EradVoice
+	EncyclopediaExtras:
+		Subfaction: iraq
 
 APOC.ERAD.ATOMIC:
 	Inherits: APOC.ATOMIC
@@ -9729,6 +10063,7 @@ APOC.ERAD.ATOMIC:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor, Heavy Armor
 		Weaknesses: • Cannot attack Aircraft
+		Attributes: • Can crush smaller vehicles and concrete walls\n• Self repairs to 50% out of combat\n• Explodes and leaves radiation on death\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~atomicengines.upgrade, ~erad.upgrade, ~apoc.upgrade, ~techlevel.high
 		BuildPaletteOrder: 242
@@ -9756,6 +10091,8 @@ APOC.ERAD.ATOMIC:
 	-Upgradeable@ERAD:
 	Voiced:
 		VoiceSet: EradVoice
+	EncyclopediaExtras:
+		Subfaction: iraq
 
 OVLD:
 	Inherits: ^Tank
@@ -9770,7 +10107,7 @@ OVLD:
 		Queue: VehicleSQ, VehicleMQ
 		BuildPaletteOrder: 235
 		Prerequisites: stek, ~vehicles.soviet, ~ovld.upgrade, ~!erad.upgrade, ~!atomicengines.upgrade, ~techlevel.high
-		Description: Enormous slow tank fitted with a commissar tower\n  which supports infantry in combat.
+		Description: Enormous slow tank fitted with a commissar tower which supports infantry in combat.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Light Armor
 		Weaknesses: • Cannot attack Aircraft
@@ -9884,6 +10221,10 @@ OVLD:
 		UpgradeAtActors: fix, rep, srep
 		BuildDuration: 100
 		RequiresCondition: !mindcontrolled
+	Encyclopedia:
+		Category: Soviets/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Infantry Doctrine.
 
 OVLD.ATOMIC:
 	Inherits: OVLD
@@ -9903,7 +10244,7 @@ OVLD.ATOMIC:
 	Upgradeable@ERAD:
 		Actor: ovld.erad.atomic
 	-Upgradeable@ATOMIC:
-	Explodes@ATOMICENGINES:
+	FireWarheadsOnDeath@ATOMICENGINES:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: !being-warped
@@ -9917,10 +10258,11 @@ OVLD.ERAD:
 		Name: Overlord Eradicator
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor, Heavy Armor
+		Attributes: • Can crush smaller vehicles and concrete walls\n• Self repairs to 50% out of combat\n• Empowers nearby basic infantry\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~ovld.upgrade, ~erad.upgrade, ~!atomicengines.upgrade, ~techlevel.high
 		BuildPaletteOrder: 237
-		Description: Enormous slow tank equipped with radiation cannons and a\ncommissar tower which supports infantry in combat.
+		Description: Enormous slow tank equipped with radiation cannons and a commissar tower which supports infantry in combat.
 	Armament@PRIMARY:
 		Weapon: OverlordRadBeamWeapon
 		MuzzlePalette: caneon
@@ -9945,6 +10287,8 @@ OVLD.ERAD:
 	-Upgradeable@ERAD:
 	Voiced:
 		VoiceSet: EradVoice
+	EncyclopediaExtras:
+		Subfaction: iraq
 
 OVLD.ERAD.ATOMIC:
 	Inherits: OVLD.ATOMIC
@@ -9952,10 +10296,11 @@ OVLD.ERAD.ATOMIC:
 		Name: Atomic Overlord Eradicator
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Armor, Heavy Armor
+		Attributes: • Can crush smaller vehicles and concrete walls\n• Self repairs to 50% out of combat\n• Empowers nearby basic infantry\n• Explodes and leaves radiation on death\n• Irradiates vehicles causing them to take more damage, deal less damage, and damage nearby units
 	Buildable:
 		Prerequisites: stek, ~vehicles.soviet, ~ovld.upgrade, ~erad.upgrade, ~atomicengines.upgrade, ~techlevel.high
 		BuildPaletteOrder: 238
-		Description: Enormous slow tank equipped with radiation cannons and a\ncommissar tower which supports infantry in combat.
+		Description: Enormous slow tank equipped with radiation cannons and a commissar tower which supports infantry in combat.
 	Armament@PRIMARY:
 		Weapon: OverlordRadBeamWeapon
 		MuzzlePalette: caneon
@@ -9980,6 +10325,8 @@ OVLD.ERAD.ATOMIC:
 	-Upgradeable@ERAD:
 	Voiced:
 		VoiceSet: EradVoice
+	EncyclopediaExtras:
+		Subfaction: iraq
 
 THWK:
 	Inherits: ^TankTD
@@ -10059,7 +10406,7 @@ THWK:
 	GrantConditionOnMovement@MOVING:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 		Condition: moving
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BarrelExplode
 	Voiced:
 		VoiceSet: ThwkVoice
@@ -10070,6 +10417,10 @@ THWK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 1194, 1194
+	Encyclopedia:
+		Category: GDI/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Bombardment Strategy.
 
 TH:
 	Inherits: ^ShootableMissile
@@ -10100,10 +10451,10 @@ TH:
 		Weapon: THWeapon
 		EmptyWeapon: VisualExplodeHusk
 		RequiresCondition: !airborne
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: THExplodeAirborne
 		RequiresCondition: airborne
-	ThrowsShrapnel@Debris:
+	FireProjectilesOnDeath@Debris:
 		Weapons: SmallDebris
 		Pieces: 3, 5
 		Range: 1c511, 3c0
@@ -10132,7 +10483,7 @@ BSKY:
 	RevealsShroud:
 		Range: 3c512
 		Type: GroundPosition
-	Explodes:
+	FireWarheadsOnDeath:
 		Weapon: BSKY
 	WithEnterExitWorldOverlay:
 		Image: smigboom
@@ -10141,7 +10492,9 @@ BSKY:
 
 ZEUS:
 	Inherits: ^Vehicle
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -10184,6 +10537,11 @@ ZEUS:
 		ChargingCondition: charging
 		Voice: Attack
 		LosesChargeWhileTurning: true
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	WithProductionIconOverlay:
+		Types: Veterancy
+		Prerequisites: vehicles.upgraded
 	AttackMove:
 		Voice: Attack
 	AmbientSoundCA:
@@ -10202,6 +10560,10 @@ ZEUS:
 		RequiresCondition: charging
 	Voiced:
 		VoiceSet: ZeusVoice
+	Encyclopedia:
+		Category: Allies/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Greece Coalition.
 
 MOLE:
 	Inherits: ^Vehicle-NOUPG
@@ -10243,7 +10605,7 @@ MOLE:
 		Sequence: empty
 		RequiresCondition: burrowing
 		Name: burrowing
-	Explodes:
+	FireWarheadsOnDeath:
 		RequiresCondition: !burrowing && !being-warped
 	KillsSelf:
 		RemoveInstead: true
@@ -10452,3 +10814,7 @@ AVTR:
 	GrantConditionOnPrerequisite@QUANTUM:
 		Condition: quantum-upgrade
 		Prerequisites: quantum.upgrade
+	Encyclopedia:
+		Category: Nod/Vehicles
+	EncyclopediaExtras:
+		AdditionalInfo: Requires Wrath Covenant.
